@@ -19,10 +19,13 @@ func GoogleTranslate(text string) string {
 	uri := "https://translate.google.cn/"
 
 	resp := rs.Get(uri).
-		SetTimeOut(600_000).
+		SetTimeOut(60_000).
 		//Proxy("127.0.0.1:1081").
 		Send().
 		ReadText()
+	if "" == resp {
+		return ""
+	}
 	tkk := getSubText(resp, "tkk:'", "'")
 	xid := getSubText(resp, "triggered_experiment_ids:[", "]")
 
@@ -34,19 +37,29 @@ func GoogleTranslate(text string) string {
 
 	resp = rs.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
 		//Proxy("127.0.0.1:1081").
-		SetTimeOut(600_000).
+		SetTimeOut(60_000).
 		Send().
 		ReadText()
+	if "" == resp {
+		return ""
+	}
 	out := format(resp)
 	return out
 }
 
 func format(str string) string {
+	if "" == str {
+		return ""
+	}
 	//fmt.Println(resp)
 	var wo []interface{}
-	_ = json.Unmarshal([]byte(str), &wo)
+	err := json.Unmarshal([]byte(str), &wo)
+	if err != nil {
+		return ""
+	}
 	var o = wo[0]
 	buff := bytes.Buffer{}
+	has := false
 	for _, v := range o.([]interface{}) {
 		c := v.([]interface{})
 		if c[0] == nil {
@@ -54,8 +67,13 @@ func format(str string) string {
 		}
 		buff.WriteString(c[0].(string))
 		buff.WriteString(" ")
+		has = true
 	}
-	return buff.String()
+	out := buff.String()
+	if has {
+		out = out[:len(out)-1]
+	}
+	return out
 }
 
 // 获取截取文本
