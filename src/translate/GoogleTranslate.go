@@ -10,6 +10,12 @@ import (
 	"strings"
 )
 
+var session = rs.Session()
+
+func init() {
+	//session.Proxy("127.0.0.1:1081")
+}
+
 // xid := triggered_experiment_ids:[45662847]
 // tkk:'444516.1633104591'
 // https://blog.csdn.net/life169/article/details/52153929
@@ -18,9 +24,8 @@ import (
 func GoogleTranslate(text string) string {
 	uri := "https://translate.google.cn/"
 
-	resp := rs.Get(uri).
+	resp := session.Get(uri).
 		SetTimeOut(60_000).
-		//Proxy("127.0.0.1:1081").
 		Send().
 		ReadText()
 	if "" == resp {
@@ -35,7 +40,7 @@ func GoogleTranslate(text string) string {
 
 	tks := tk(text, tkk)
 
-	resp = rs.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
+	resp = session.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
 		//Proxy("127.0.0.1:1081").
 		SetTimeOut(60_000).
 		Send().
