@@ -2,8 +2,8 @@ package test
 
 import (
 	"fmt"
-	gts "github.com/Jecced/go-tools/src"
 	"github.com/Jecced/go-tools/src/fileutil"
+	"github.com/Jecced/go-tools/src/gts"
 	"regexp"
 	"strings"
 	"sync"
