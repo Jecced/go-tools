@@ -1,9 +1,9 @@
-package go_tools
+package test
 
 import (
 	"fmt"
-	"go-tools/src"
-	"go-tools/src/fileutil"
+	gts "github.com/Jecced/go-tools/src"
+	"github.com/Jecced/go-tools/src/fileutil"
 	"regexp"
 	"strings"
 	"sync"
