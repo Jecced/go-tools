@@ -2,6 +2,8 @@ package fileutil
 
 import (
 	"bytes"
+	"crypto/md5"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -109,16 +111,33 @@ func DirCopy(src, dist string) {
 }
 
 // 写入文本到指定文件
-func WriteText(text, dist string) {
+func WriteText(text, dist string) error {
+	// 创建输出文件的父目录
+	//MkdirParent(dist)
+	//create, err := os.Create(dist)
+	//if err != nil {
+	//	_ = fmt.Errorf("写入文本到指定文件失败, err: %v", err)
+	//	return
+	//}
+	//defer create.Close()
+	//_, _ = create.WriteString(text)
+	return WriteData([]byte(text), dist)
+}
+
+// 写入数据到指定文件
+func WriteData(data []byte, dist string) error {
 	// 创建输出文件的父目录
 	MkdirParent(dist)
 	create, err := os.Create(dist)
 	if err != nil {
-		_ = fmt.Errorf("写入文本到指定文件失败, err: %v", err)
-		return
+		return err
 	}
 	defer create.Close()
-	_, _ = create.WriteString(text)
+	_, err = create.Write(data)
+	if err != nil {
+		return err
+	}
+	return nil
 }
 
 // 将一个文件读取成字符串返回
@@ -179,4 +198,10 @@ func GetRelativePath(from, to string) string {
 	}
 	path := sb.String()
 	return path[:len(path)-1]
+}
+
+// 获取md5
+func GetMd5(data *[]byte) string {
+	m := md5.Sum(*data)
+	return hex.EncodeToString(m[:])
 }
