@@ -143,11 +143,19 @@ func WriteData(data []byte, dist string) error {
 
 // 将一个文件读取成字符串返回
 func ReadText(file string) (string, error) {
-	fileBytes, err := ioutil.ReadFile(file)
+	bytes, err := ReadBytes(file)
 	if err != nil {
 		return "", err
 	}
-	return string(fileBytes), nil
+	return string(bytes), nil
+}
+
+func ReadBytes(file string) ([]byte, error) {
+	fileBytes, err := ioutil.ReadFile(file)
+	if err != nil {
+		return nil, err
+	}
+	return fileBytes, nil
 }
 
 // 清空一个目录的所有内容
