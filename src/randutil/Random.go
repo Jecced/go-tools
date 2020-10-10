@@ -19,7 +19,17 @@ func (r *Random) Next(min, max int64) float64 {
 }
 
 // 下一个整形
-func (r *Random) NextInt(min, max int64) int64 {
+func (r *Random) NextInt(min, max int) int {
+	return int(r.Next(int64(min), int64(max)))
+}
+
+// 下一个Int32
+func (r *Random) NextInt32(min, max int32) int32 {
+	return int32(r.Next(int64(min), int64(max)))
+}
+
+// 下一个Int64
+func (r *Random) NextInt64(min, max int64) int64 {
 	return int64(r.Next(min, max))
 }
 
@@ -31,4 +41,9 @@ func (r *Random) NextBool() bool {
 // 重新设置种子
 func (r *Random) SetSeed(seed int64) {
 	*r = Random(seed)
+}
+
+// 获取种子
+func (r *Random) GetSeed() int64 {
+	return int64(*r)
 }
