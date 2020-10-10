@@ -2,15 +2,11 @@ package fileutil
 
 import (
 	"bytes"
-	"crypto/md5"
-	"encoding/base64"
-	"encoding/hex"
 	"fmt"
+	"github.com/Jecced/go-tools/src/commutil"
 	"io"
 	"io/ioutil"
-	"log"
 	"os"
-	"os/exec"
 	"strings"
 )
 
@@ -163,15 +159,6 @@ func ClearDir(dir string) {
 	_ = os.RemoveAll(dir)
 }
 
-// zip
-func Zip(zipPath, dirPath string) {
-	command := exec.Command("zip", "-r", "-o", zipPath, dirPath)
-	err := command.Run()
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
 // 从 from 到 to 的相对路径
 /*
 outJsPath := "/Users/ankang/git/saisheng/slgrpg/temp/quick-scripts/assets/script/feature/battleoverride"
@@ -210,21 +197,19 @@ func GetRelativePath(from, to string) string {
 }
 
 // 获取md5
+// Deprecated: Use commutil.GetMd5 instead.
 func GetMd5(data *[]byte) string {
-	m := md5.Sum(*data)
-	return hex.EncodeToString(m[:])
+	return commutil.GetMd5(data)
 }
 
 // 生成base64
+// Deprecated: Use commutil.EncodeBase64 instead.
 func EncodeBase64(data *[]byte) string {
-	return base64.StdEncoding.EncodeToString(*data)
+	return commutil.EncodeBase64(data)
 }
 
 // 解析base64
+// Deprecated: Use commutil.DecodeBase64 instead.
 func DecodeBase64(text string) ([]byte, error) {
-	decodeBytes, err := base64.StdEncoding.DecodeString(text)
-	if err != nil {
-		return nil, nil
-	}
-	return decodeBytes, nil
+	return commutil.DecodeBase64(text)
 }
