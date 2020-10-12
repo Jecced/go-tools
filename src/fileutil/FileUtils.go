@@ -28,6 +28,23 @@ func MkdirParent(path string) {
 	}
 }
 
+// 获取某个文件夹下所有指定后缀的文件
+func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error) {
+	dir, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		return nil, err
+	}
+	for _, fi := range dir {
+		if fi.IsDir() {
+			newFiles, _ := GetFilesBySuffix(dirPath+FileSep+fi.Name(), suffix)
+			files = append(files, newFiles...)
+		} else if strings.HasSuffix(fi.Name(), suffix) {
+			files = append(files, dirPath+FileSep+fi.Name())
+		}
+	}
+	return files, nil
+}
+
 // 文件拷贝
 func FileCopy(src, dist string) (length int, err error) {
 	_ = os.Remove(dist)
