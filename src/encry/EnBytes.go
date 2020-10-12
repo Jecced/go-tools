@@ -37,17 +37,32 @@ func BytesSeedSwap(data []byte, seed int64, direction bool) []byte {
 // @return 修改后的字节数据
 type ModifyByte func(b byte) byte
 
+// 某多个位置二进制进行翻转
+// @param mask 将一个二进制的第几位进行翻转, warn: mask取值范围是0~7
+// @return 返回一个自定义修改函数 ModifyByte
+func ByteFlips(masks ...uint8) ModifyByte {
+	return func(value byte) byte {
+		for _, mask := range masks {
+			value = byteFlip(mask, value)
+		}
+		return value
+	}
+}
+
 // 某1个位置二进制进行翻转
 // @param mask 将一个二进制的第几位进行翻转, warn: mask取值范围是0~7
 // @return 返回一个自定义修改函数 ModifyByte
 func ByteFlip(mask uint8) ModifyByte {
-	return func(value byte) byte {
-		flag := byte(1 << mask)
-		if 0 == value&flag {
-			return value | flag
-		}
-		return value & ^flag
+	return ByteFlips(mask)
+}
+
+// 将某一个位置二进制进行翻转
+func byteFlip(mask uint8, value byte) byte {
+	flag := byte(1 << mask)
+	if 0 == value&flag {
+		return value | flag
 	}
+	return value & ^flag
 }
 
 // 某1个位置的二进制进行加入offset
