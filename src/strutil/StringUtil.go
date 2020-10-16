@@ -49,3 +49,30 @@ func CamelCaseToUnderscore(s string) string {
 	}
 	return string(output)
 }
+
+// 前后缀匹配出第一个
+func FindMatchFirst(str, s, e string, fix bool) string {
+	resp := FindMatch(str, s, e, fix)
+	if 0 == len(resp) {
+		return ""
+	}
+	return resp[0]
+}
+
+// 前后缀匹配
+func FindMatch(str, s, e string, fix bool) []string {
+	rex := regexp.MustCompile(s + `([^` + e + `]+)` + e)
+	//rex := regexp.MustCompile(`name="([^"]+)"`)
+	out := rex.FindAllStringSubmatch(str, -1)
+
+	var resp []string
+
+	for _, i := range out {
+		if fix {
+			resp = append(resp, i[0])
+		} else {
+			resp = append(resp, i[1])
+		}
+	}
+	return resp
+}
