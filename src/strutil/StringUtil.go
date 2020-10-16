@@ -61,7 +61,8 @@ func FindMatchFirst(str, s, e string, fix bool) string {
 
 // 前后缀匹配
 func FindMatch(str, s, e string, fix bool) []string {
-	rex := regexp.MustCompile(s + `([^` + e + `]+)` + e)
+	ex := s + `([^(` + e + `|` + s + `)]+)` + e
+	rex := regexp.MustCompile(ex)
 	//rex := regexp.MustCompile(`name="([^"]+)"`)
 	out := rex.FindAllStringSubmatch(str, -1)
 
