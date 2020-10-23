@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Jecced/go-tools/src/fileutil"
 	"image"
+	"image/draw"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
@@ -78,4 +79,12 @@ func imageCopy(src image.Image, x, y, w, h int) (image.Image, error) {
 		return subImg, errors.New("图片解码失败")
 	}
 	return subImg, nil
+}
+
+func CreatPng(width, height int) *image.RGBA {
+	return image.NewRGBA(image.Rect(0, 0, width, height))
+}
+
+func MixImg(src *image.RGBA, dist image.Image, x, y int) {
+	draw.Draw(src, dist.Bounds().Add(image.Pt(x, y)), dist, image.Point{}, draw.Over)
 }
