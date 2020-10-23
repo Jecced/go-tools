@@ -30,6 +30,9 @@ func MkdirParent(path string) {
 
 // 获取某个文件夹下所有指定后缀的文件
 func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error) {
+	for strings.HasSuffix(dirPath, FileSep) {
+		dirPath = dirPath[:len(dirPath)-1]
+	}
 	dir, err := ioutil.ReadDir(dirPath)
 	if err != nil {
 		return nil, err
