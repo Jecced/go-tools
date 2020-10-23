@@ -15,7 +15,7 @@ import (
 
 // 图片裁剪
 func Trimming(beforeFilename string, afterFilename string, x, y, w, h int) {
-	src, err := loadImage(beforeFilename)
+	src, err := LoadImage(beforeFilename)
 	if err != nil {
 		log.Println("load image fail..", err.Error())
 		return
@@ -26,13 +26,13 @@ func Trimming(beforeFilename string, afterFilename string, x, y, w, h int) {
 		log.Println("image copy fail...", err.Error())
 		return
 	}
-	saveErr := saveImage(afterFilename, img)
+	saveErr := SaveImage(afterFilename, img)
 	if saveErr != nil {
 		log.Println("save image fail..", saveErr)
 	}
 }
 
-func loadImage(path string) (img image.Image, err error) {
+func LoadImage(path string) (img image.Image, err error) {
 	file, err := os.Open(path)
 	if err != nil {
 		return
@@ -42,7 +42,7 @@ func loadImage(path string) (img image.Image, err error) {
 	return
 }
 
-func saveImage(p string, src image.Image) error {
+func SaveImage(p string, src image.Image) error {
 	fileutil.MkdirParent(p)
 	f, err := os.OpenFile(p, os.O_SYNC|os.O_RDWR|os.O_CREATE, 0666)
 
