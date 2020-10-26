@@ -187,6 +187,7 @@ fmt.Println(outJsPath, filePath)
 path := fileutil.GetRelativePath(outJsPath, filePath)
 fmt.Println(path)
 */
+// Deprecated: use filepath.Rel(from, to) replace this method
 func GetRelativePath(from, to string) string {
 	var fromArr = strings.Split(from, FileSep)
 	var toArr = strings.Split(to, FileSep)
