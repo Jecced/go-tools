@@ -34,3 +34,28 @@ func Rotation180(m image.Image) *image.RGBA {
 	}
 	return rotate180
 }
+
+func RotationImgRight(in, out string) error {
+	return rotation(in, out, RotationRight)
+}
+
+func RotationImgLeft(in, out string) error {
+	return rotation(in, out, RotationLeft)
+}
+
+func RotationImg180(in, out string) error {
+	return rotation(in, out, Rotation180)
+}
+
+func rotation(in, out string, meth func(image.Image) *image.RGBA) error {
+	loadImage, err := LoadImage(in)
+	if err != nil {
+		return err
+	}
+	img := meth(loadImage)
+	err = SaveImage(out, img)
+	if err != nil {
+		return err
+	}
+	return nil
+}
