@@ -26,3 +26,11 @@ func (s *session) Get(url string) *session {
 func (s *session) Post(url string) *session {
 	return s.commReq(url, POST)
 }
+
+func (s *session) GetProxy() string {
+	proxy := s.proxy
+	if s.req != nil && s.req.proxy != "" {
+		proxy = s.req.proxy
+	}
+	return proxy
+}

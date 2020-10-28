@@ -1,6 +1,9 @@
 package https
 
-import "net/url"
+import (
+	"net/http"
+	"net/url"
+)
 
 // 独立请求模块
 // 属于 session 部分
@@ -19,4 +22,6 @@ type request struct {
 	// 当处于session阶段, 每次进行新的get和set阶段
 	// 将判断上一次请求是否已经关闭, 如果没有关闭, 则自动关闭
 	close bool
+
+	response *http.Response
 }
