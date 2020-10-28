@@ -34,8 +34,16 @@ type CommFace interface {
 	BasicAuth(user, password string) CommFace
 }
 
-// 请求前的构造接口
+// session 阶段的构造接口
+type Sessions interface {
+	CommFace
+	Get(url string) Sessions
+	Post(url string) Sessions
+}
+
+// request 请求阶段的构造函数
 type Requests interface {
+	CommFace
 	// 增加一个参数
 	AddParam(key, value string) Requests
 	// 增加多个参数
@@ -49,7 +57,8 @@ type Requests interface {
 	//Send() Responses
 }
 
-// 请求后的构造接口
+// Send() 请求后的构造接口
+// 如果没有进行写入或者读取, 则必须手动关闭Close, 否则会造成泄漏
 type Responses interface {
 	// 关闭流
 	Close()
