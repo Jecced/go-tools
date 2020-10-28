@@ -61,9 +61,9 @@ type Requests interface {
 // 如果没有进行写入或者读取, 则必须手动关闭Close, 否则会造成泄漏
 type Responses interface {
 	// 关闭流
-	Close()
+	Close() error
 	// 将流写入到文件
-	WriteFile(path string)
+	WriteFile(path string) error
 	// 读取文件
-	ReadText() string
+	ReadText() (string, error)
 }

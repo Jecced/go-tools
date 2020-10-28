@@ -2,7 +2,10 @@ package https
 
 import (
 	"fmt"
+	"github.com/Jecced/go-tools/src/fileutil"
+	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 func (s *session) Send() *session {
@@ -47,4 +50,55 @@ func (s *session) Send() *session {
 	s.req.response = response
 
 	return s
+}
+
+func (s *session) Close() error {
+	if s.req == nil {
+		return nil
+	}
+	if s.req.response == nil {
+		return nil
+	}
+	err := s.req.response.Body.Close()
+	s.req.close = true
+	return err
+}
+
+func (s *session) WriteFile(path string) error {
+	// 标准化路径
+	path = fileutil.PathFormat(path)
+	// 尝试创建父文件夹, 防止因为文件夹不存在而出错
+	fileutil.MkdirParent(path)
+
+	// 创建文件
+	create, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	defer create.Close()
+
+	bytes, err := ioutil.ReadAll(s.req.response.Body)
+	if err != nil {
+		return err
+	}
+
+	_, err = create.Write(bytes)
+	if err != nil {
+		return err
+	}
+
+	return s.Close()
+}
+
+func (s *session) ReadText() (string, error) {
+	bytes, err := ioutil.ReadAll(s.req.response.Body)
+	if err != nil {
+		return "", err
+	}
+	resp := string(bytes)
+	err = s.Close()
+	if err != nil {
+		return "", err
+	}
+	return resp, nil
 }
