@@ -8,7 +8,7 @@ import (
 )
 
 func TestParam(t *testing.T) {
-	p := make(https.Param)
+	p := make(https.BaseParam)
 	p.Add("ok", "realy?")
 	p.Adds(map[string]string{
 		"真的":    "xiongmao",

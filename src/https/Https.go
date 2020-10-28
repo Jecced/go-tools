@@ -1,20 +1,20 @@
 package https
 
-import "net/url"
+type RequestType string
 
-type https struct {
-	uri string
+const (
+	GET  RequestType = "GET"
+	POST RequestType = "POST"
+)
 
-	param url.Values
+func Get(url string) *session {
+	return Session().Get(url)
 }
 
-// session环境
-// 共享Cookie
-// 共享请求头
-// 共享Proxy
-// 共享BasicAuth
-// 共享超时时间
-type session struct {
-	cookie Param
-	header Param
+func Post(url string) *session {
+	return Session().Post(url)
+}
+
+func Session() *session {
+	return &session{}
 }

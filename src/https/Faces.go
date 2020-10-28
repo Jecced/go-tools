@@ -1,5 +1,7 @@
 package https
 
+// 公用部分
+
 // 请求前的构造接口
 type Requests interface {
 	// 增加一个参数
@@ -14,7 +16,7 @@ type Requests interface {
 	//// 增加一个请求头
 	//AddHeader(key, value string)
 	//// 增加多个请求头
-	//AddHeaders(Param map[string]string)
+	//AddHeaders(BaseParam map[string]string)
 	//// 移除一个请求头
 	//RemoveHeader(key string)
 	//// 清空所有请求头
@@ -23,7 +25,7 @@ type Requests interface {
 	//// 增加一个cookie
 	//AddCookie(key, value string)
 	//// 增加多个cookie
-	//AddCookies(Param map[string]string)
+	//AddCookies(BaseParam map[string]string)
 	//// 移除一个cookie
 	//RemoveCookie(key string)
 	//// 清空所有cookie
