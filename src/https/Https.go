@@ -3,8 +3,8 @@ package https
 type requestType string
 
 const (
-	get  requestType = "get"
-	post requestType = "post"
+	get  requestType = "GET"
+	post requestType = "POST"
 )
 
 // 枚举, 固定请求头

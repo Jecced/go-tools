@@ -1,5 +1,7 @@
 package https
 
+import "net/url"
+
 // session环境
 // 默认公用Cookie
 // 默认公用请求头
@@ -11,13 +13,14 @@ type session struct {
 	req *request
 }
 
-func (s *session) commReq(url string, method requestType) *session {
+func (s *session) commReq(uri string, method requestType) *session {
 	req := &request{
-		uri:    url,
+		uri:    uri,
 		method: method,
 	}
 	req.header = make(baseParam)
 	req.cookie = make(baseParam)
+	req.param = make(url.Values)
 	s.req = req
 	return s
 }
