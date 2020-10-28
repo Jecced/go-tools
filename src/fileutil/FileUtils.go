@@ -3,6 +3,7 @@ package fileutil
 import (
 	"bytes"
 	"fmt"
+	"github.com/Jecced/go-tools/src/ak"
 	"github.com/Jecced/go-tools/src/commutil"
 	"io"
 	"io/ioutil"
@@ -10,9 +11,9 @@ import (
 	"strings"
 )
 
-var (
+const (
 	// 系统路径分隔符
-	FileSep = string(os.PathSeparator)
+	FileSep = ak.PS
 )
 
 // 根据路径创建文件夹
