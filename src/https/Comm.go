@@ -22,69 +22,69 @@ type comm struct {
 	respTimeout int
 }
 
-func (c *comm) AddCookie(key, value string) *comm {
+func (c *comm) AddCookie(key, value string) CommFace {
 	c.cookie.Add(key, value)
 	return c
 }
 
-func (c *comm) AddCookies(entries map[string]string) *comm {
+func (c *comm) AddCookies(entries map[string]string) CommFace {
 	c.cookie.Adds(entries)
 	return c
 }
 
-func (c *comm) RemoveCookie(key string) *comm {
+func (c *comm) RemoveCookie(key string) CommFace {
 	c.cookie.Remove(key)
 	return c
 }
 
-func (c *comm) ClearCookie() *comm {
+func (c *comm) ClearCookie() CommFace {
 	c.cookie.Clear()
 	return c
 }
 
-func (c *comm) AddHeader(key, value string) *comm {
+func (c *comm) AddHeader(key, value string) CommFace {
 	c.header.Add(key, value)
 	return c
 }
 
-func (c *comm) AddHeaders(entries map[string]string) *comm {
+func (c *comm) AddHeaders(entries map[string]string) CommFace {
 	c.header.Adds(entries)
 	return c
 }
 
-func (c *comm) RemoveHeader(key string) *comm {
+func (c *comm) RemoveHeader(key string) CommFace {
 	c.header.Remove(key)
 	return c
 }
 
-func (c *comm) ClearHeader() *comm {
+func (c *comm) ClearHeader() CommFace {
 	c.header.Clear()
 	return c
 }
 
-func (c *comm) Proxy(proxy string) *comm {
+func (c *comm) Proxy(proxy string) CommFace {
 	c.proxy = proxy
 	return c
 }
 
-func (c *comm) BasicAuth(user, password string) *comm {
+func (c *comm) BasicAuth(user, password string) CommFace {
 	c.auth = "Basic " +
 		base64.URLEncoding.EncodeToString([]byte(user+":"+password))
 	return c
 }
 
-func (c *comm) SetTimeOut(time int) *comm {
+func (c *comm) SetTimeOut(time int) CommFace {
 	c.SetConnTimeOut(time)
 	c.SetRespTimeOut(time)
 	return c
 }
 
-func (c *comm) SetConnTimeOut(time int) *comm {
+func (c *comm) SetConnTimeOut(time int) CommFace {
 	c.connTimeout = time
 	return c
 }
 
-func (c *comm) SetRespTimeOut(time int) *comm {
+func (c *comm) SetRespTimeOut(time int) CommFace {
 	c.respTimeout = time
 	return c
 }
