@@ -110,6 +110,29 @@ func GetParentDir(path string) string {
 	return path[0:index]
 }
 
+// 路径格式化, 标准化一个路径到当前系统规范
+func PathFormat(path string) string {
+	list := []rune(path)
+	ps := os.PathSeparator
+	for i, l, t := 0, len(list), ' '; i < l; i++ {
+		t = list[i]
+		// 不是分隔符的字节, 直接跳过
+		if t != '/' && t != '\\' {
+			continue
+		}
+		// 将当前字节先替换成系统分隔符
+		list[i] = ps
+		//如果当前字符和上一个字符相同, 则删除, 否则, 跳过
+		if i == 0 || list[i] != list[i-1] {
+			continue
+		}
+		list = append(list[:i], list[i+1:]...)
+		i--
+		l--
+	}
+	return string(list)
+}
+
 // 目录拷贝
 func DirCopy(src, dist string) {
 	MkdirAll(dist)
@@ -169,6 +192,7 @@ func ReadText(file string) (string, error) {
 	return string(bytes), nil
 }
 
+// 读取一个文件的 byte 二进制
 func ReadBytes(file string) ([]byte, error) {
 	fileBytes, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -183,13 +207,13 @@ func ClearDir(dir string) {
 }
 
 // 从 from 到 to 的相对路径
-/*
-outJsPath := "/Users/ankang/git/saisheng/slgrpg/temp/quick-scripts/assets/script/feature/battleoverride"
-filePath := "/Users/ankang/git/saisheng/slgrpg/assets/script/feature/battleoverride"
-fmt.Println(outJsPath, filePath)
-path := fileutil.GetRelativePath(outJsPath, filePath)
-fmt.Println(path)
-*/
+//
+// outJsPath := "/Users/ankang/git/saisheng/slgrpg/temp/quick-scripts/assets/script/feature/battleoverride"
+// filePath := "/Users/ankang/git/saisheng/slgrpg/assets/script/feature/battleoverride"
+// fmt.Println(outJsPath, filePath)
+// path := fileutil.GetRelativePath(outJsPath, filePath)
+// fmt.Println(path)
+//
 // Deprecated: use filepath.Rel(from, to) replace this method
 func GetRelativePath(from, to string) string {
 	var fromArr = strings.Split(from, FileSep)
