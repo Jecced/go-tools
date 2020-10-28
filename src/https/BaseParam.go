@@ -6,8 +6,8 @@ func (p BaseParam) Add(key, value string) {
 	p[key] = value
 }
 
-func (p BaseParam) Adds(param map[string]string) {
-	for k, v := range param {
+func (p BaseParam) Adds(entries map[string]string) {
+	for k, v := range entries {
 		p[k] = v
 	}
 }
