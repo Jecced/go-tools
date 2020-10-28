@@ -1,31 +1,31 @@
 package https
 
-type BaseParam map[string]string
+type baseParam map[string]string
 
-func (p BaseParam) Add(key, value string) {
+func (p baseParam) Add(key, value string) {
 	p[key] = value
 }
 
-func (p BaseParam) Adds(entries map[string]string) {
+func (p baseParam) Adds(entries map[string]string) {
 	for k, v := range entries {
 		p[k] = v
 	}
 }
 
-func (p BaseParam) Remove(key string) {
+func (p baseParam) Remove(key string) {
 	delete(p, key)
 }
 
-func (p *BaseParam) Clear() {
-	*p = make(BaseParam)
+func (p *baseParam) Clear() {
+	*p = make(baseParam)
 }
 
-func (p *BaseParam) Mix(other BaseParam) {
+func (p *baseParam) Mix(other baseParam) {
 	p.Adds(other)
 }
 
-func (p *BaseParam) Clone() BaseParam {
-	out := make(BaseParam)
+func (p *baseParam) Clone() baseParam {
+	out := make(baseParam)
 	for k, v := range *p {
 		out[k] = v
 	}

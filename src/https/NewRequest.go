@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func GetUrl(uri string, param url.Values) string {
+func getUrl(uri string, param url.Values) string {
 	// 参数列表为空 直接返回
 	if 0 == len(param) {
 		return uri
@@ -33,7 +33,7 @@ func GetUrl(uri string, param url.Values) string {
 
 // get请求将生成get请求url
 func (s *session) getNewRequest() (*http.Request, error) {
-	return http.NewRequest(string(s.req.method), GetUrl(s.req.uri, s.req.param), nil)
+	return http.NewRequest(string(s.req.method), getUrl(s.req.uri, s.req.param), nil)
 }
 
 // 生成post请求

@@ -7,16 +7,20 @@ import (
 
 // 设置请求头
 func setHeader(request *http.Request, s *session) {
-	if s.auth != "" {
-		s.AddHeader(HeaderAuthorization, s.auth)
+	auth := s.auth
+	if s.req.auth != "" {
+		auth = s.req.auth
+	}
+	if auth != "" {
+		s.AddHeader(headerAuthorization, auth)
 	}
 
-	if s.req.method == POST && len(s.req.param) > 0 {
-		request.Header.Set(HeaderContentType, "application/x-www-form-urlencoded")
+	if s.req.method == post && len(s.req.param) > 0 {
+		request.Header.Set(headerContentType, "application/x-www-form-urlencoded")
 	}
 
 	// 设置cookie
-	request.Header.Set(HeaderCookie, cookieFormat(s))
+	request.Header.Set(headerCookie, cookieFormat(s))
 
 	// 混合请求头
 	header := s.header.Clone()

@@ -8,7 +8,7 @@ import (
 	"os"
 )
 
-func (s *session) Send() *session {
+func (s *session) Send() responses {
 	var request *http.Request
 	var err error
 
@@ -18,9 +18,9 @@ func (s *session) Send() *session {
 	}
 
 	switch s.req.method {
-	case GET:
+	case get:
 		request, err = s.getNewRequest()
-	case POST:
+	case post:
 		request, err = s.postNewRequest()
 	}
 

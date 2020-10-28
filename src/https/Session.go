@@ -7,24 +7,27 @@ package https
 // 默认BasicAuth
 // 默认超时时间
 type session struct {
-	comm
+	base
 	req *request
 }
 
-func (s *session) commReq(url string, method RequestType) *session {
-	s.req = &request{
+func (s *session) commReq(url string, method requestType) *session {
+	req := &request{
 		uri:    url,
 		method: method,
 	}
+	req.header = make(baseParam)
+	req.cookie = make(baseParam)
+	s.req = req
 	return s
 }
 
-func (s *session) Get(url string) *session {
-	return s.commReq(url, GET)
+func (s *session) Get(url string) requests {
+	return s.commReq(url, get)
 }
 
-func (s *session) Post(url string) *session {
-	return s.commReq(url, POST)
+func (s *session) Post(url string) requests {
+	return s.commReq(url, post)
 }
 
 func (s *session) GetProxy() string {

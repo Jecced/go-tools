@@ -9,13 +9,13 @@ import (
 // 属于 session 部分
 // 每个请求都是一个 request
 type request struct {
-	comm
+	base
 	// 每个request都有自己的 uri 地址, param 参数
 	uri   string
 	param url.Values
 
-	// 用来确定是 GET 请求还是 POST 请求, 默认为 GET 请求
-	method RequestType
+	// 用来确定是 get 请求还是 post 请求, 默认为 get 请求
+	method requestType
 
 	// 用于优化
 	// 用来判断当前请求是否已经close
