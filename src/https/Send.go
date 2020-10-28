@@ -27,6 +27,8 @@ func (s *session) Send() *session {
 
 	client := buildClient(s)
 
+	setHeader(request, s)
+
 	response, err := client.Do(request)
 	if err != nil {
 		fmt.Println("发送请求失败", err.Error())

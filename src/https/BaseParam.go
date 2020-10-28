@@ -23,3 +23,11 @@ func (p *BaseParam) Clear() {
 func (p *BaseParam) Mix(other BaseParam) {
 	p.Adds(other)
 }
+
+func (p *BaseParam) Clone() BaseParam {
+	out := make(BaseParam)
+	for k, v := range *p {
+		out[k] = v
+	}
+	return out
+}
