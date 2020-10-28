@@ -13,7 +13,7 @@ type Requester interface {
 	//// 增加一个请求头
 	//AddHeader(key, value string)
 	//// 增加多个请求头
-	//AddHeaders(param map[string]string)
+	//AddHeaders(Param map[string]string)
 	//// 移除一个请求头
 	//RemoveHeader(key string)
 	//// 清空所有请求头
@@ -22,7 +22,7 @@ type Requester interface {
 	//// 增加一个cookie
 	//AddCookie(key, value string)
 	//// 增加多个cookie
-	//AddCookies(param map[string]string)
+	//AddCookies(Param map[string]string)
 	//// 移除一个cookie
 	//RemoveCookie(key string)
 	//// 清空所有cookie
