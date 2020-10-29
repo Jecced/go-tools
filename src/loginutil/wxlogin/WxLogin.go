@@ -2,11 +2,11 @@ package wxlogin
 
 import (
 	"fmt"
-	"github.com/Jecced/rs/src/rs"
+	"github.com/Jecced/go-tools/src/https"
 )
 
-func WxLogin(id, secret, code string) string {
+func WxLogin(id, secret, code string) (string, error) {
 	uri := "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code"
 	url := fmt.Sprintf(uri, id, secret, code)
-	return rs.Get(url).Send().ReadText()
+	return https.Get(url).Send().ReadText()
 }

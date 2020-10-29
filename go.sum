@@ -1,6 +1,2 @@
-github.com/Jecced/rs v1.3.2 h1:Aj+a2sgrdBZYWAKhD6k3TAPRkRwdwjU35GZAsjdaTBk=
-github.com/Jecced/rs v1.3.2/go.mod h1:5oZxfHHCsJ7v3hCgilhWHlZOhWZcBz0Xe5B2DofGkt8=
-github.com/Jecced/rs v1.3.4 h1:5Oa8Zfh2I/q1qyE5Qkg4Jm/yuawEN/xOqJVihLgsNBs=
-github.com/Jecced/rs v1.3.4/go.mod h1:5oZxfHHCsJ7v3hCgilhWHlZOhWZcBz0Xe5B2DofGkt8=
 github.com/go-sql-driver/mysql v1.5.0 h1:ozyZYNQW3x3HtqT1jira07DN2PArx2v7/mN66gGcHOs=
 github.com/go-sql-driver/mysql v1.5.0/go.mod h1:DCzpHaOWr8IXmIStZouvnhqoel9Qv2LBy8hT2VhHyBg=

@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"github.com/Jecced/rs/src/rs"
+	"github.com/Jecced/go-tools/src/https"
 	"net/url"
 	"strconv"
 	"strings"
 )
 
-var session = rs.Session()
+var session = https.Session()
 
 func init() {
 	//session.Proxy("127.0.0.1:1081")
@@ -24,10 +24,14 @@ func init() {
 func GoogleTranslate(text string) string {
 	uri := "https://translate.google.cn/"
 
-	resp := session.Get(uri).
+	resp, err := session.Get(uri).
 		SetTimeOut(60_000).
 		Send().
 		ReadText()
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
 	if "" == resp {
 		return ""
 	}
@@ -40,11 +44,15 @@ func GoogleTranslate(text string) string {
 
 	tks := tk(text, tkk)
 
-	resp = session.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
+	resp, err = session.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
 		//Proxy("127.0.0.1:1081").
 		SetTimeOut(60_000).
 		Send().
 		ReadText()
+	if err != nil {
+		fmt.Println(err.Error())
+		return ""
+	}
 	if "" == resp {
 		return ""
 	}
