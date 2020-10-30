@@ -12,18 +12,11 @@ import (
 )
 
 var (
-	session = https.Session()
-	tkk     = "444516.1633104591"
-	xid     = "45662847"
+	session     = https.Session()
+	tkk         = "444516.1633104591"
+	xid         = "45662847"
+	initialized = false
 )
-
-func init() {
-	//session.Proxy("127.0.0.1:1081")
-	err := first()
-	if err != nil {
-		log.Println(err.Error())
-	}
-}
 
 type Error struct {
 	msg string
@@ -33,11 +26,13 @@ func (e Error) Error() string {
 	return e.msg
 }
 
-func first() error {
+func initialize() error {
+	log.Println("谷歌翻译信息初始化")
 	uri := "https://translate.google.cn/"
 
 	resp, err := session.Get(uri).
 		SetTimeOut(60_000).
+		Retry(3).
 		Send().
 		ReadText()
 	if err != nil {
@@ -61,6 +56,14 @@ func first() error {
 // https://www.cnblogs.com/by-dream/p/6554340.html
 // 谷歌翻译
 func GoogleTranslate(text string) (string, error) {
+
+	if !initialized {
+		err := initialize()
+		if err != nil {
+			log.Println(err.Error())
+		}
+		initialized = true
+	}
 
 	//translateUri := "https://translate.google.cn/translate_a/single?client=webapp&sl=en&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&pc=1&otf=1&ssel=3&tsel=6&xid=45662847&kc=1&tk=886133.740610&q=%22Clearly%2C%20then%2C%20the%20city%20is%20not%20a%20concrete%20jungle%2C%20it%20is%20a%20human%20zoo.%22"
 	translateUri := "https://translate.google.cn/translate_a/single?client=webapp&sl=en&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&&ssel=6&tsel=3&xid=%s&kc=0&tk=%s&q=%s"
