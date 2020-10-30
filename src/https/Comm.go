@@ -1,5 +1,13 @@
 package https
 
+func getRetry(s *session) uint {
+	count := s.req.retry
+	if 0 == count {
+		count = s.comm.retry
+	}
+	return count
+}
+
 func getAuth(s *session) string {
 	auth := s.req.auth
 	if "" == auth {
@@ -92,6 +100,10 @@ func (p *p1) BasicAuth(user, password string) *p1 {
 	p.comm.auth = encodeBasicAuth(user, password)
 	return p
 }
+func (p *p1) Retry(count uint) *p1 {
+	p.comm.retry = count
+	return p
+}
 
 // 维护 request 私有区
 func (p *p2) AddHeader(key, value string) *p2 {
@@ -145,5 +157,9 @@ func (p *p2) Proxy(proxy string) *p2 {
 }
 func (p *p2) BasicAuth(user, password string) *p2 {
 	p.req.auth = encodeBasicAuth(user, password)
+	return p
+}
+func (p *p2) Retry(count uint) *p2 {
+	p.req.retry = count
 	return p
 }

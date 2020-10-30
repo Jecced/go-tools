@@ -17,4 +17,7 @@ type base struct {
 	connTimeout int
 	// 相应Resp的超时时间
 	respTimeout int
+
+	// 重试次数
+	retry uint
 }

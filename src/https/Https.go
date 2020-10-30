@@ -16,6 +16,9 @@ type session struct {
 	close    bool
 
 	err error
+
+	// 已经重试的次数
+	retry uint
 }
 
 func Session() *p1 {

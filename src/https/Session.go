@@ -32,4 +32,5 @@ func (p *p1) newComm(method, uri string) {
 		_ = p.response.Body.Close()
 	}
 	p.close = false
+	p.retry = 0
 }
