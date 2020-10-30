@@ -13,8 +13,8 @@ import (
 
 var (
 	session = https.Session()
-	tkk     string
-	xid     string
+	tkk     = "444516.1633104591"
+	xid     = "45662847"
 )
 
 func init() {
