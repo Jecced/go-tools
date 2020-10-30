@@ -8,6 +8,7 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"strings"
 )
 
@@ -99,15 +100,17 @@ func PathExists(path string) bool {
 
 // 获取一个路径的父目录地址
 func GetParentDir(path string) string {
-	path = strings.Trim(path, " ")
-	if strings.HasSuffix(path, "/") || strings.HasSuffix(path, FileSep) {
-		path = path[0 : len(path)-1]
-	}
-	index := strings.LastIndex(path, "/")
-	if -1 == index {
-		index = strings.LastIndex(path, FileSep)
-	}
-	return path[0:index]
+	//path = strings.Trim(path, " ")
+	//if strings.HasSuffix(path, "/") || strings.HasSuffix(path, FileSep) {
+	//	path = path[0 : len(path)-1]
+	//}
+	//index := strings.LastIndex(path, "/")
+	//if -1 == index {
+	//	index = strings.LastIndex(path, FileSep)
+	//}
+	//return path[0:index]
+	dir, _ := filepath.Split(path)
+	return dir
 }
 
 // 路径格式化, 标准化一个路径到当前系统规范
