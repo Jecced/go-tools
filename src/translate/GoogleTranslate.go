@@ -5,23 +5,35 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Jecced/go-tools/src/https"
+	"log"
 	"net/url"
 	"strconv"
 	"strings"
 )
 
-var session = https.Session()
+var (
+	session = https.Session()
+	tkk     string
+	xid     string
+)
 
 func init() {
 	//session.Proxy("127.0.0.1:1081")
+	err := first()
+	if err != nil {
+		log.Println(err.Error())
+	}
 }
 
-// xid := triggered_experiment_ids:[45662847]
-// tkk:'444516.1633104591'
-// https://blog.csdn.net/life169/article/details/52153929
-// https://www.cnblogs.com/by-dream/p/6554340.html
-// 谷歌翻译
-func GoogleTranslate(text string) string {
+type Error struct {
+	msg string
+}
+
+func (e Error) Error() string {
+	return e.msg
+}
+
+func first() error {
 	uri := "https://translate.google.cn/"
 
 	resp, err := session.Get(uri).
@@ -29,46 +41,53 @@ func GoogleTranslate(text string) string {
 		Send().
 		ReadText()
 	if err != nil {
-		fmt.Println(err.Error())
-		return ""
+		return err
 	}
-	if "" == resp {
-		return ""
+
+	tkk = getSubText(resp, "tkk:'", "'")
+	if tkk == "" {
+		return Error{"获取ttk初始化失败"}
 	}
-	tkk := getSubText(resp, "tkk:'", "'")
-	xid := getSubText(resp, "triggered_experiment_ids:[", "]")
+	xid = getSubText(resp, "triggered_experiment_ids:[", "]")
+	if xid == "" {
+		return Error{"获取xid初始化失败"}
+	}
+	return err
+}
+
+// xid := triggered_experiment_ids:[45662847]
+// tkk:'444516.1633104591'
+// https://blog.csdn.net/life169/article/details/52153929
+// https://www.cnblogs.com/by-dream/p/6554340.html
+// 谷歌翻译
+func GoogleTranslate(text string) (string, error) {
 
 	//translateUri := "https://translate.google.cn/translate_a/single?client=webapp&sl=en&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&pc=1&otf=1&ssel=3&tsel=6&xid=45662847&kc=1&tk=886133.740610&q=%22Clearly%2C%20then%2C%20the%20city%20is%20not%20a%20concrete%20jungle%2C%20it%20is%20a%20human%20zoo.%22"
 	translateUri := "https://translate.google.cn/translate_a/single?client=webapp&sl=en&tl=zh-CN&hl=zh-CN&dt=at&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=sos&dt=ss&dt=t&&ssel=6&tsel=3&xid=%s&kc=0&tk=%s&q=%s"
 	//text := "今天天气很不错"
 
-	tks := tk(text, tkk)
+	tks, err := tk(text, tkk)
 
-	resp, err = session.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
+	resp, err := session.Get(fmt.Sprintf(translateUri, xid, tks, url.QueryEscape(text))).
 		//Proxy("127.0.0.1:1081").
 		SetTimeOut(60_000).
 		Send().
 		ReadText()
 	if err != nil {
-		fmt.Println(err.Error())
-		return ""
+		return "", err
 	}
-	if "" == resp {
-		return ""
-	}
-	out := format(resp)
-	return out
+	out, err := format(resp)
+	return out, err
 }
 
-func format(str string) string {
+func format(str string) (string, error) {
 	if "" == str {
-		return ""
+		return "", Error{"格式化结果, 没有内容"}
 	}
-	//fmt.Println(resp)
 	var wo []interface{}
 	err := json.Unmarshal([]byte(str), &wo)
 	if err != nil {
-		return ""
+		return "", err
 	}
 	var o = wo[0]
 	buff := bytes.Buffer{}
@@ -86,7 +105,7 @@ func format(str string) string {
 	if has {
 		out = out[:len(out)-1]
 	}
-	return out
+	return out, nil
 }
 
 // 获取截取文本
@@ -130,10 +149,19 @@ func b(a int32, b string) int32 {
 	return a
 }
 
-func tk(a, TTK string) string {
+func tk(a, TTK string) (string, error) {
 	e := strings.Split(TTK, ".")
-	h, _ := strconv.ParseInt(e[0], 10, 32)
-	x, _ := strconv.ParseInt(e[1], 10, 64)
+	if len(e) != 2 {
+		return "", Error{fmt.Sprintf("tk函数, TTK参数错误:%s", TTK)}
+	}
+	h, err := strconv.ParseInt(e[0], 10, 32)
+	if err != nil {
+		return "", err
+	}
+	x, err := strconv.ParseInt(e[1], 10, 64)
+	if err != nil {
+		return "", err
+	}
 	g := make([]int32, 0, 0)
 	ra := []rune(a)
 
@@ -169,5 +197,5 @@ func tk(a, TTK string) string {
 		bb = (bb & 2147483647) + 2147483648
 	}
 	bb %= 1e6
-	return strconv.FormatInt(bb, 10) + "." + strconv.FormatInt(bb^h, 10)
+	return strconv.FormatInt(bb, 10) + "." + strconv.FormatInt(bb^h, 10), nil
 }

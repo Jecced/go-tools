@@ -7,6 +7,12 @@ import (
 )
 
 func TestTranslate(t *testing.T) {
-	cn := gts.TranslateEn2Cn("fuck your computer")
+	test("fuck your computer")
+	test("fuck")
+	test("what are you doing")
+}
+func test(text string) {
+	cn, err := gts.TranslateEn2Cn(text)
 	fmt.Println(cn)
+	fmt.Println(err)
 }
