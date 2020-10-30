@@ -1,6 +1,8 @@
 package https
 
 import (
+	"fmt"
+	"log"
 	"net/http"
 )
 
@@ -44,6 +46,26 @@ func (p *p2) ClearParam() *p2 {
 }
 
 func (p *p2) Send() *p3 {
+	retry := getRetry((*session)(p))
+	if 0 == retry {
+		p.err = p.send()
+		return (*p3)(p)
+	}
+	var err error
+	for i := 0; i < retry; i++ {
+		err = p.send()
+		if err == nil {
+			break
+		}
+		log.Println(fmt.Sprintf("\nretry: %d, uri: %s\ncause: %v", i+1, p.uri, err))
+	}
+	if err != nil {
+		p.err = err
+	}
+	return (*p3)(p)
+}
+
+func (p *p2) send() error {
 	var request *http.Request
 	var err error
 
@@ -55,8 +77,7 @@ func (p *p2) Send() *p3 {
 	}
 
 	if err != nil {
-		p.err = err
-		return (*p3)(p)
+		return err
 	}
 
 	client := buildClient(p)
@@ -65,8 +86,7 @@ func (p *p2) Send() *p3 {
 
 	response, err := client.Do(request)
 	if err != nil {
-		p.err = err
-		return (*p3)(p)
+		return err
 	}
 
 	// 处理response返回的cookie
@@ -76,6 +96,5 @@ func (p *p2) Send() *p3 {
 	}
 
 	p.response = response
-
-	return (*p3)(p)
+	return nil
 }

@@ -1,11 +1,11 @@
 package https
 
-func getRetry(s *session) uint {
+func getRetry(s *session) int {
 	count := s.req.retry
 	if 0 == count {
 		count = s.comm.retry
 	}
-	return count
+	return int(count)
 }
 
 func getAuth(s *session) string {
