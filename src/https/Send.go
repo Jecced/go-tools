@@ -11,7 +11,7 @@ import (
 // // 关闭流
 // Close() error
 // // 将流写入到文件
-// WriteFile(path string) error
+// WriteToFile(path string) error
 // // 读取文件
 // ReadText() (string, error)
 type p3 session
@@ -31,7 +31,7 @@ func (p *p3) Close() error {
 	return err
 }
 
-func (p *p3) WriteFile(path string) error {
+func (p *p3) WriteToFile(path string) error {
 	if p.err != nil {
 		return p.err
 	}
