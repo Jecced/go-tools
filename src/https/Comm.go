@@ -95,35 +95,35 @@ func (p *p1) BasicAuth(user, password string) *p1 {
 
 // 维护 request 私有区
 func (p *p2) AddHeader(key, value string) *p2 {
-	p.comm.header.Add(key, value)
+	p.req.header.Add(key, value)
 	return p
 }
 func (p *p2) AddHeaders(entries map[string]string) *p2 {
-	p.comm.header.Adds(entries)
+	p.req.header.Adds(entries)
 	return p
 }
 func (p *p2) RemoveHeader(key string) *p2 {
-	p.comm.header.Remove(key)
+	p.req.header.Remove(key)
 	return p
 }
 func (p *p2) ClearHeader() *p2 {
-	p.comm.header.Clear()
+	p.req.header.Clear()
 	return p
 }
 func (p *p2) AddCookie(key, value string) *p2 {
-	p.comm.cookie.Add(key, value)
+	p.req.cookie.Add(key, value)
 	return p
 }
 func (p *p2) AddCookies(entries map[string]string) *p2 {
-	p.comm.cookie.Adds(entries)
+	p.req.cookie.Adds(entries)
 	return p
 }
 func (p *p2) RemoveCookie(key string) *p2 {
-	p.comm.cookie.Remove(key)
+	p.req.cookie.Remove(key)
 	return p
 }
 func (p *p2) ClearCookie() *p2 {
-	p.comm.cookie.Clear()
+	p.req.cookie.Clear()
 	return p
 }
 func (p *p2) SetTimeOut(time int) *p2 {
@@ -132,18 +132,18 @@ func (p *p2) SetTimeOut(time int) *p2 {
 	return p
 }
 func (p *p2) SetConnTimeOut(time int) *p2 {
-	p.comm.connTimeout = time
+	p.req.connTimeout = time
 	return p
 }
 func (p *p2) SetRespTimeOut(time int) *p2 {
-	p.comm.respTimeout = time
+	p.req.respTimeout = time
 	return p
 }
 func (p *p2) Proxy(proxy string) *p2 {
-	p.comm.proxy = proxy
+	p.req.proxy = proxy
 	return p
 }
 func (p *p2) BasicAuth(user, password string) *p2 {
-	p.comm.auth = encodeBasicAuth(user, password)
+	p.req.auth = encodeBasicAuth(user, password)
 	return p
 }
