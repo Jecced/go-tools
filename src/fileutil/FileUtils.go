@@ -136,6 +136,43 @@ func PathFormat(path string) string {
 	return string(list)
 }
 
+// 获取目录下所有文件类型
+func FindAllFileTypes(dir string) (types []string) {
+
+	cache := make(map[string]bool)
+
+	readDir, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return
+	}
+	var name string
+	var i int
+	for _, info := range readDir {
+		if info.IsDir() {
+			out := FindAllFileTypes(dir + ak.PS + info.Name())
+			for _, s := range out {
+				cache[s] = true
+			}
+			continue
+		}
+		name = info.Name()
+		name = strings.ToLower(name)
+		i = strings.LastIndex(name, ".")
+		if i == -1 {
+			cache["unknown"] = true
+		} else {
+			cache[name[i:]] = true
+		}
+		name = ""
+	}
+
+	types = make([]string, 0, len(cache))
+	for s := range cache {
+		types = append(types, s)
+	}
+	return
+}
+
 // 目录拷贝
 func DirCopy(src, dist string) {
 	MkdirAll(dist)
