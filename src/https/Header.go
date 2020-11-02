@@ -6,8 +6,8 @@ import (
 )
 
 // 设置请求头
-func setHeader(request *http.Request, s *session) {
-	auth := getAuth(s)
+func (s *session) SetHeader(request *http.Request) {
+	auth := s.GetAuth()
 	if auth != "" {
 		s.req.header.Add(headerAuthorization, auth)
 	}
@@ -17,7 +17,7 @@ func setHeader(request *http.Request, s *session) {
 	}
 
 	// 设置cookie
-	request.Header.Set(headerCookie, cookieFormat(s))
+	request.Header.Set(headerCookie, s.CookieFormat())
 
 	// 混合请求头
 	s.req.header.Mix(s.comm.header)
@@ -28,7 +28,7 @@ func setHeader(request *http.Request, s *session) {
 }
 
 // 格式化所有 cookie 信息
-func cookieFormat(s *session) string {
+func (s *session) CookieFormat() string {
 	// 混合 cookie
 	s.req.cookie.Mix(s.comm.cookie)
 

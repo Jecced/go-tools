@@ -1,48 +1,5 @@
 package https
 
-func getRetry(s *session) int {
-	count := s.req.retry
-	if 0 == count {
-		count = s.comm.retry
-	}
-	return int(count)
-}
-
-func getAuth(s *session) string {
-	auth := s.req.auth
-	if "" == auth {
-		auth = s.comm.auth
-	}
-	return auth
-}
-
-func getProxy(s *session) string {
-	proxy := s.req.proxy
-	if "" == proxy {
-		proxy = s.comm.proxy
-	}
-	return proxy
-}
-
-func hasRespTimeout(s *session) bool {
-	return getRespTimeout(s) != 0
-}
-func getRespTimeout(s *session) int {
-	timeout := s.req.respTimeout
-	if 0 == timeout {
-		timeout = s.comm.respTimeout
-	}
-	return timeout
-}
-
-func getConnTimeout(s *session) int {
-	timeout := s.req.connTimeout
-	if 0 == timeout {
-		timeout = s.comm.connTimeout
-	}
-	return timeout
-}
-
 // 维护session共享区
 func (p *p1) AddHeader(key, value string) *p1 {
 	p.comm.header.Add(key, value)

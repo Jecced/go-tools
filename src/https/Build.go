@@ -7,21 +7,22 @@ import (
 )
 
 // 生成建立连接的信息
-func buildClient(p *p2) *http.Client {
+func (p *p2) buildClient() *http.Client {
 	client := &http.Client{
-		Transport: buildTransport(p),
+		Transport: p.buildTransport(),
 	}
 	return client
 }
 
 // 生成传输方法
-func buildTransport(p *p2) *http.Transport {
+func (p *p2) buildTransport() *http.Transport {
+	s := (*session)(p)
 
 	t := &http.Transport{
 		Dial: p.dial,
 	}
-	if hasRespTimeout((*session)(p)) {
-		t.ResponseHeaderTimeout = time.Millisecond * time.Duration(getRespTimeout((*session)(p)))
+	if s.HasRespTimeout() {
+		t.ResponseHeaderTimeout = time.Millisecond * time.Duration(s.GetRespTimeout())
 	}
 
 	// 设置代理信息
@@ -30,9 +31,11 @@ func buildTransport(p *p2) *http.Transport {
 }
 
 func (p *p2) dial(netw, addr string) (net.Conn, error) {
-	connTimeout := getConnTimeout((*session)(p))
+	s := (*session)(p)
 
-	respTimeout := getRespTimeout((*session)(p))
+	connTimeout := s.GetConnTimeout()
+
+	respTimeout := s.GetRespTimeout()
 
 	var conn net.Conn
 	var err error

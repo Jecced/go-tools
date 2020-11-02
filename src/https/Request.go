@@ -46,7 +46,8 @@ func (p *p2) ClearParam() *p2 {
 }
 
 func (p *p2) Send() *p3 {
-	retry := getRetry((*session)(p))
+	s := (*session)(p)
+	retry := s.GetRetry()
 	if 0 == retry {
 		p.err = p.send()
 		return (*p3)(p)
@@ -80,9 +81,11 @@ func (p *p2) send() error {
 		return err
 	}
 
-	client := buildClient(p)
+	client := p.buildClient()
 
-	setHeader(request, (*session)(p))
+	s := (*session)(p)
+
+	s.SetHeader(request)
 
 	response, err := client.Do(request)
 	if err != nil {
