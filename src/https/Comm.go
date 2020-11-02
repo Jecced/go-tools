@@ -35,9 +35,6 @@ func getRespTimeout(s *session) int {
 	return timeout
 }
 
-func hasConnTimeout(s *session) bool {
-	return getConnTimeout(s) != 0
-}
 func getConnTimeout(s *session) int {
 	timeout := s.req.connTimeout
 	if 0 == timeout {

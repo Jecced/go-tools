@@ -30,7 +30,7 @@ func buildTransport(p *p2) *http.Transport {
 }
 
 func (p *p2) dial(netw, addr string) (net.Conn, error) {
-	connTimeout := getRespTimeout((*session)(p))
+	connTimeout := getConnTimeout((*session)(p))
 
 	respTimeout := getRespTimeout((*session)(p))
 
