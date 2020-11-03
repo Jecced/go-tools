@@ -3,7 +3,6 @@ package fileutil
 import (
 	"bytes"
 	"fmt"
-	"github.com/Jecced/go-tools/src/ak"
 	"io"
 	"io/ioutil"
 	"os"
@@ -13,7 +12,7 @@ import (
 
 const (
 	// 系统路径分隔符
-	FileSep = ak.PS
+	FileSep = string(os.PathSeparator)
 )
 
 // 根据路径创建文件夹
@@ -148,7 +147,7 @@ func FindAllFileTypes(dir string) (types []string) {
 	var i int
 	for _, info := range readDir {
 		if info.IsDir() {
-			out := FindAllFileTypes(dir + ak.PS + info.Name())
+			out := FindAllFileTypes(dir + FileSep + info.Name())
 			for _, s := range out {
 				cache[s] = true
 			}
