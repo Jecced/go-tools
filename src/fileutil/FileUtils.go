@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/Jecced/go-tools/src/ak"
-	"github.com/Jecced/go-tools/src/commutil"
 	"io"
 	"io/ioutil"
 	"os"
@@ -282,22 +281,4 @@ func GetRelativePath(from, to string) string {
 	}
 	path := sb.String()
 	return path[:len(path)-1]
-}
-
-// 获取md5
-// Deprecated: Use commutil.GetMd5 instead.
-func GetMd5(data *[]byte) string {
-	return commutil.GetMd5(data)
-}
-
-// 生成base64
-// Deprecated: Use commutil.EncodeBase64 instead.
-func EncodeBase64(data *[]byte) string {
-	return commutil.EncodeBase64(data)
-}
-
-// 解析base64
-// Deprecated: Use commutil.DecodeBase64 instead.
-func DecodeBase64(text string) ([]byte, error) {
-	return commutil.DecodeBase64(text)
 }
