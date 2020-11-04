@@ -26,7 +26,7 @@ func (p *p2) buildTransport() *http.Transport {
 	}
 
 	// 设置代理信息
-	setProxy(t, (*session)(p))
+	s.setProxy(t)
 	return t
 }
 

@@ -6,7 +6,7 @@ import (
 )
 
 // 给 translate 设置代理
-func setProxy(transport *http.Transport, s *session) {
+func (s *session) setProxy(transport *http.Transport) {
 	if s.GetProxy() != "" {
 		transport.Proxy = s.proxyFun
 	}
