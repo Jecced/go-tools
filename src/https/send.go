@@ -1,7 +1,9 @@
 package https
 
 import (
+	"errors"
 	"github.com/Jecced/go-tools/src/fileutil"
+	"io"
 	"io/ioutil"
 	"os"
 )
@@ -38,7 +40,10 @@ func (p *p3) WriteToFile(path string) error {
 	// 标准化路径
 	path = fileutil.PathFormat(path)
 	// 尝试创建父文件夹, 防止因为文件夹不存在而出错
-	fileutil.MkdirParent(path)
+	err := fileutil.MkdirParent(path)
+	if err != nil {
+		return err
+	}
 
 	// 创建文件
 	create, err := os.Create(path)
@@ -47,7 +52,7 @@ func (p *p3) WriteToFile(path string) error {
 	}
 	defer create.Close()
 
-	bytes, err := ioutil.ReadAll(p.response.Body)
+	bytes, err := p.GetBytes()
 	if err != nil {
 		return err
 	}
@@ -61,17 +66,40 @@ func (p *p3) WriteToFile(path string) error {
 }
 
 func (p *p3) ReadText() (string, error) {
-	if p.err != nil {
-		return "", p.err
-	}
-	bytes, err := ioutil.ReadAll(p.response.Body)
+	bytes, err := p.GetBytes()
 	if err != nil {
 		return "", err
 	}
-	resp := string(bytes)
+	return string(bytes), nil
+}
+
+func (p *p3) GetReader() (io.Reader, error) {
+	if p.response == nil {
+		return nil, errors.New("没有找到response信息")
+	}
+
+	if p.response.Body == nil {
+		return nil, errors.New("response中没有找到body流")
+	}
+	w := p.response.Body
+	return w, nil
+}
+
+func (p *p3) GetBytes() ([]byte, error) {
+	if p.err != nil {
+		return nil, p.err
+	}
+	body, err := p.GetReader()
+	if err != nil {
+		return nil, err
+	}
+	all, err := ioutil.ReadAll(body)
+	if err != nil {
+		return nil, err
+	}
 	err = p.Close()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return resp, nil
+	return all, nil
 }
