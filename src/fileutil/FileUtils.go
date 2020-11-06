@@ -2,7 +2,6 @@ package fileutil
 
 import (
 	"bytes"
-	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -16,16 +15,17 @@ const (
 )
 
 // 根据路径创建文件夹
-func MkdirAll(path string) {
-	_ = os.MkdirAll(path, 0777)
+func MkdirAll(path string) error {
+	return os.MkdirAll(path, 0777)
 }
 
 // 创建一个文件的父目录
-func MkdirParent(path string) {
+func MkdirParent(path string) error {
 	parent := GetParentDir(path)
 	if !PathExists(parent) {
-		MkdirAll(parent)
+		return MkdirAll(parent)
 	}
+	return nil
 }
 
 // 获取某个文件夹下所有指定后缀的文件
@@ -51,43 +51,66 @@ func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error)
 }
 
 // 文件拷贝
-func FileCopy(src, dist string) (length int, err error) {
+func FileCopy(src, dist string) (err error) {
 	_ = os.Remove(dist)
 
 	// 开启 源文件
 	srcFile, err := os.Open(src)
 	if err != nil {
-		_ = fmt.Errorf("src file open faild, name: %s, error: %v\n", src, err)
-		return 0, err
+		return err
 	}
 	defer srcFile.Close()
 
 	// 创建输出文件的父目录
-	MkdirParent(dist)
+	err = MkdirParent(dist)
+	if err != nil {
+		return err
+	}
 
 	// 创建目标文件
 	distFile, err := os.Create(dist)
 	if err != nil {
-		_ = fmt.Errorf("dist file creat faild, name: %s, error: %v\n", src, err)
-		return 0, err
+		return err
 	}
 	defer distFile.Close()
 
 	// 创建缓冲区
 	bs := make([]byte, 1024*10, 1024*10)
 	n := -1
-	total := 0
 	for {
 		n, err = srcFile.Read(bs)
 		if err == io.EOF || n == 0 {
 			break
 		} else if err != nil {
-			return total, err
+			return err
 		}
-		total += n
 		_, _ = distFile.Write(bs[:n])
 	}
-	return total, nil
+	return nil
+}
+
+// 目录拷贝
+func DirCopy(src, dist string) error {
+	err := MkdirAll(dist)
+	if err != nil {
+		return err
+	}
+
+	fileInfos, err := ioutil.ReadDir(src)
+	if err != nil {
+		return err
+	}
+
+	for _, file := range fileInfos {
+		fileSrc := src + FileSep + file.Name()
+		fileDist := dist + FileSep + file.Name()
+		if file.IsDir() {
+			DirCopy(fileSrc, fileDist)
+			continue
+		}
+		_ = FileCopy(fileSrc, fileDist)
+	}
+	return nil
 }
 
 // 判断一个路径是否存在
@@ -169,26 +192,6 @@ func FindAllFileTypes(dir string) (types []string) {
 		types = append(types, s)
 	}
 	return
-}
-
-// 目录拷贝
-func DirCopy(src, dist string) {
-	MkdirAll(dist)
-
-	fileInfos, err := ioutil.ReadDir(src)
-	if err != nil {
-		return
-	}
-
-	for _, file := range fileInfos {
-		fileSrc := src + FileSep + file.Name()
-		fileDist := dist + FileSep + file.Name()
-		if file.IsDir() {
-			DirCopy(fileSrc, fileDist)
-			continue
-		}
-		_, _ = FileCopy(fileSrc, fileDist)
-	}
 }
 
 // 写入文本到指定文件
