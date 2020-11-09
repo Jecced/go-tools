@@ -3,6 +3,7 @@ package translate
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"github.com/Jecced/go-tools/src/https"
 	"log"
@@ -17,14 +18,6 @@ var (
 	xid         = "45662847"
 	initialized = false
 )
-
-type Error struct {
-	msg string
-}
-
-func (e Error) Error() string {
-	return e.msg
-}
 
 func initialize() error {
 	log.Println("谷歌翻译信息初始化")
@@ -41,11 +34,11 @@ func initialize() error {
 
 	tkk = getSubText(resp, "tkk:'", "'")
 	if tkk == "" {
-		return Error{"获取ttk初始化失败"}
+		return errors.New("获取ttk初始化失败")
 	}
 	xid = getSubText(resp, "triggered_experiment_ids:[", "]")
 	if xid == "" {
-		return Error{"获取xid初始化失败"}
+		return errors.New("获取xid初始化失败")
 	}
 	return err
 }
@@ -85,7 +78,7 @@ func GoogleTranslate(text string) (string, error) {
 
 func format(str string) (string, error) {
 	if "" == str {
-		return "", Error{"格式化结果, 没有内容"}
+		return "", errors.New("格式化结果, 没有内容")
 	}
 	var wo []interface{}
 	err := json.Unmarshal([]byte(str), &wo)
@@ -155,7 +148,7 @@ func b(a int32, b string) int32 {
 func tk(a, TTK string) (string, error) {
 	e := strings.Split(TTK, ".")
 	if len(e) != 2 {
-		return "", Error{fmt.Sprintf("tk函数, TTK参数错误:%s", TTK)}
+		return "", errors.New(fmt.Sprintf("tk函数, TTK参数错误:%s", TTK))
 	}
 	h, err := strconv.ParseInt(e[0], 10, 32)
 	if err != nil {
