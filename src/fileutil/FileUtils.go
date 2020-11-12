@@ -247,6 +247,11 @@ func ClearDir(dir string) {
 	_ = os.RemoveAll(dir)
 }
 
+// 可以删除一个文件, 空文件夹
+func RemoveFile(file string) error {
+	return os.Remove(file)
+}
+
 // 从 from 到 to 的相对路径
 //
 // outJsPath := "/Users/ankang/git/saisheng/slgrpg/temp/quick-scripts/assets/script/feature/battleoverride"
