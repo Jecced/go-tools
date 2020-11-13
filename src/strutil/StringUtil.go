@@ -78,17 +78,32 @@ func FindMatch(str, s, e string, fix bool) []string {
 	return resp
 }
 
+// 基于 strings.Index 实现的前后缀匹配查找第一个
+func MatchStringFirst(text, prefix, suffix string, fix bool) string {
+	resp := MatchString(text, prefix, suffix, fix)
+	if 0 == len(resp) {
+		return ""
+	}
+	return resp[0]
+}
+
 // 基于 strings.Index 实现的前后缀匹配查找
-func MatchString(text, prefix, suffix string) []string {
+func MatchString(text, prefix, suffix string, fix bool) []string {
 	st, ed := -1, -1
+	prefixLen := len(prefix)
 	suffixLen := len(suffix)
 	out := make([]string, 0, 0)
 	for st = IndexOf(text, prefix, st); st != -1; st = IndexOf(text, prefix, st) {
-		ed = IndexOf(text, suffix, st)
+		ed = IndexOf(text, suffix, st+prefixLen)
 		if ed == -1 || ed == st {
 			break
 		}
-		t := text[st : ed+suffixLen]
+		t := ""
+		if fix {
+			t = text[st : ed+suffixLen]
+		} else {
+			t = text[st+prefixLen : ed]
+		}
 		st += suffixLen
 		out = append(out, t)
 	}
