@@ -289,3 +289,34 @@ func GetRelativePath(from, to string) string {
 	path := sb.String()
 	return path[:len(path)-1]
 }
+
+// 自内向外删除所有空文件夹
+func DelEmptyDir(dir string) (bool, error) {
+	list, err := ioutil.ReadDir(dir)
+	if err != nil {
+		return false, err
+	}
+
+	// 确定文件夹内部文件数量
+	l := len(list)
+
+	for _, info := range list {
+		if !info.IsDir() {
+			continue
+		}
+		path := dir + string(os.PathSeparator) + info.Name()
+		b, err := DelEmptyDir(path)
+		if err != nil {
+			continue
+		}
+		if b {
+			err := os.Remove(path)
+			if err != nil {
+				continue
+			}
+			l--
+		}
+	}
+
+	return l == 0, nil
+}
