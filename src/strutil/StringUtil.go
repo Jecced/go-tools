@@ -78,6 +78,18 @@ func FindMatch(str, s, e string, fix bool) []string {
 	return resp
 }
 
+// 完善 strings.Index, 多加入索引位置参数
+func IndexOf(text, substr string, index int) int {
+	if index < 0 {
+		index = 0
+	}
+	i := strings.Index(text[index:], substr)
+	if -1 == i {
+		return -1
+	}
+	return i + index
+}
+
 // 插入文本, 插入的内容 @insert 会放在原始文本 @text 中 @template 的前面
 // 在 @insert 中搜索 @template 的位置 @st
 // 在 @st 位置 前 插入 @insert 的字符串文本内容
