@@ -78,6 +78,23 @@ func FindMatch(str, s, e string, fix bool) []string {
 	return resp
 }
 
+// 基于 strings.Index 实现的前后缀匹配查找
+func MatchString(text, prefix, suffix string) []string {
+	st, ed := -1, -1
+	suffixLen := len(suffix)
+	out := make([]string, 0, 0)
+	for st = IndexOf(text, prefix, st); st != -1; st = IndexOf(text, prefix, st) {
+		ed = IndexOf(text, suffix, st)
+		if ed == -1 || ed == st {
+			break
+		}
+		t := text[st : ed+suffixLen]
+		st += suffixLen
+		out = append(out, t)
+	}
+	return out
+}
+
 // 完善 strings.Index, 多加入索引位置参数
 func IndexOf(text, substr string, index int) int {
 	if index < 0 {
