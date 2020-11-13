@@ -290,7 +290,7 @@ func GetRelativePath(from, to string) string {
 	return path[:len(path)-1]
 }
 
-// 自内向外删除所有空文件夹
+// 自内向外删除所有空文件夹, 如果文件是.DS_Store的话, 也会一起删除
 func DelEmptyDir(dir string) (bool, error) {
 	list, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -299,12 +299,21 @@ func DelEmptyDir(dir string) (bool, error) {
 
 	// 确定文件夹内部文件数量
 	l := len(list)
+	path := ""
 
 	for _, info := range list {
+		path = dir + string(os.PathSeparator) + info.Name()
+		if !info.IsDir() && info.Name() == ".DS_Store" {
+			err := os.Remove(path)
+			if err != nil {
+				continue
+			}
+			l--
+			continue
+		}
 		if !info.IsDir() {
 			continue
 		}
-		path := dir + string(os.PathSeparator) + info.Name()
 		b, err := DelEmptyDir(path)
 		if err != nil {
 			continue
@@ -317,6 +326,5 @@ func DelEmptyDir(dir string) (bool, error) {
 			l--
 		}
 	}
-
 	return l == 0, nil
 }
