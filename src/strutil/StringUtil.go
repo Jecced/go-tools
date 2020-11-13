@@ -104,7 +104,7 @@ func MatchString(text, prefix, suffix string, fix bool) []string {
 		} else {
 			t = text[st+prefixLen : ed]
 		}
-		st += suffixLen
+		st = ed + suffixLen
 		out = append(out, t)
 	}
 	return out
