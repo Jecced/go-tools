@@ -77,3 +77,17 @@ func FindMatch(str, s, e string, fix bool) []string {
 	}
 	return resp
 }
+
+// 插入文本, 插入的内容 @insert 会放在原始文本 @text 中 @template 的前面
+// 在 @insert 中搜索 @template 的位置 @st
+// 在 @st 位置 前 插入 @insert 的字符串文本内容
+// @param text 		原始文本
+// @param insert 	插入的内容
+// @param template 	查询字符串
+func InsertString(text *string, insert, template string) {
+	st := strings.Index(*text, template)
+	if -1 == st {
+		return
+	}
+	*text = (*text)[:st] + insert + (*text)[st:]
+}
