@@ -4,35 +4,15 @@ import (
 	"errors"
 	"github.com/Jecced/go-tools/src/fileutil"
 	"image"
-	"image/draw"
 	"image/gif"
 	"image/jpeg"
 	"image/png"
-	"log"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
-// 图片裁剪
-func Trimming(beforeFilename string, afterFilename string, x, y, w, h int) {
-	src, err := LoadImage(beforeFilename)
-	if err != nil {
-		log.Println("load image fail..", err.Error())
-		return
-	}
-
-	img, err := imageCopy(src, x, y, w, h)
-	if err != nil {
-		log.Println("image copy fail...", err.Error())
-		return
-	}
-	saveErr := SaveImage(afterFilename, img)
-	if saveErr != nil {
-		log.Println("save image fail..", saveErr)
-	}
-}
-
+// 读取一张图片
 func LoadImage(path string) (img image.Image, err error) {
 	file, err := os.Open(path)
 	if err != nil {
@@ -43,8 +23,12 @@ func LoadImage(path string) (img image.Image, err error) {
 	return
 }
 
+// 保存一张图片
 func SaveImage(p string, src image.Image) error {
-	fileutil.MkdirParent(p)
+	err := fileutil.MkdirParent(p)
+	if err != nil {
+		return err
+	}
 	f, err := os.OpenFile(p, os.O_SYNC|os.O_RDWR|os.O_CREATE, 0666)
 
 	if err != nil {
@@ -65,6 +49,7 @@ func SaveImage(p string, src image.Image) error {
 	return err
 }
 
+// 从一张图片里面截取一部分出来
 func imageCopy(src image.Image, x, y, w, h int) (image.Image, error) {
 	var subImg image.Image
 	if rgbImg, ok := src.(*image.YCbCr); ok {
@@ -79,12 +64,4 @@ func imageCopy(src image.Image, x, y, w, h int) (image.Image, error) {
 		return subImg, errors.New("图片解码失败")
 	}
 	return subImg, nil
-}
-
-func CreatPng(width, height int) *image.RGBA {
-	return image.NewRGBA(image.Rect(0, 0, width, height))
-}
-
-func MixImg(src *image.RGBA, dist image.Image, x, y int) {
-	draw.Draw(src, dist.Bounds().Add(image.Pt(x, y)), dist, image.Point{}, draw.Over)
 }
