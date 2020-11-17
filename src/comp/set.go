@@ -1,4 +1,4 @@
-package com
+package comp
 
 import (
 	"sync"
