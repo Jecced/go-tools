@@ -47,7 +47,7 @@ func TrimBlankImg(src image.Image) (image.Image, error) {
 		}
 		_, _, _, a := src.At(x, y).RGBA()
 		if a != 0 {
-			maxY = y
+			maxY = y + 1
 			break
 		}
 	}
@@ -73,7 +73,7 @@ func TrimBlankImg(src image.Image) (image.Image, error) {
 		}
 		_, _, _, a := src.At(x, y).RGBA()
 		if a != 0 {
-			maxX = x
+			maxX = x + 1
 			break
 		}
 	}
