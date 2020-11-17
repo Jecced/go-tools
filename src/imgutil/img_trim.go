@@ -1,6 +1,24 @@
 package imgutil
 
-import "image"
+import (
+	"github.com/Jecced/go-tools/src/fileutil"
+	"image"
+)
+
+// 将一个文件夹内的内容都进行Trim
+func TrimBlankDir(dir, suffix string) error {
+	list, err := fileutil.GetFilesBySuffix(dir, suffix)
+	if err != nil {
+		return err
+	}
+	for _, path := range list {
+		err = TrimBlankFile(path, path)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}
 
 // 将一个图片文件Trim空白边
 func TrimBlankFile(in, out string) error {
