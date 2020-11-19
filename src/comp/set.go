@@ -13,7 +13,7 @@ type set struct {
 }
 
 type Set interface {
-	Add(item key)
+	Add(item key) bool
 	Remove(item key)
 	Has(item key) bool
 	Size() int
@@ -41,12 +41,17 @@ func commConstructor(sync bool, items ...key) *set {
 	return &set{m: cache, sync: sync}
 }
 
-func (s *set) Add(item key) {
+// 返回是否 add 成功, 如果原本这个值已经存在返回false
+func (s *set) Add(item key) bool {
 	if s.sync {
 		s.Lock()
 		defer s.Unlock()
 	}
+	if s.Has(item) {
+		return false
+	}
 	s.m[item] = true
+	return true
 }
 
 func (s *set) Remove(item key) {
