@@ -12,13 +12,23 @@ type set struct {
 	sync.RWMutex
 }
 
+type Set interface {
+	Add(item key)
+	Remove(item key)
+	Has(item key) bool
+	Size() int
+	Clear()
+	IsEmpty() bool
+	List() []key
+}
+
 // 非线程安全的set
-func Set(items ...key) *set {
+func NewSet(items ...key) Set {
 	return commConstructor(false, items...)
 }
 
 // 线程安全的set
-func CSet(items ...key) *set {
+func NewCSet(items ...key) Set {
 	return commConstructor(true, items...)
 }
 
