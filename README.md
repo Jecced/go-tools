@@ -12,18 +12,18 @@ string(os.PathSeparator)
 ### set
 ```
 // 获取一个非线程安全的set
-comp.Set(...items)
+var set Set = comp.Set(...items)
 
 // 获取一个线程安全的set
-comp.CSet(...items)
+var set Set = comp.CSet(...items)
 
-set.Add(item key)
-set.Remove(item key)
-set.Has(item key)
-set.Size(item key)
-set.Clear(item key)
-set.IsEmpty(item key)
-set.List(item key)
+set.Add(item node) bool
+set.Remove(item node) bool
+set.Has(item node) bool
+set.Size() int
+set.Clear()
+set.IsEmpty() bool
+set.List() []node
 
 ```
 
