@@ -4,37 +4,37 @@ import (
 	"sync"
 )
 
-type key interface{}
+type node interface{}
 
 type set struct {
-	m    map[key]bool
+	m    map[node]bool
 	sync bool
 	sync.RWMutex
 }
 
 type Set interface {
-	Add(item key) bool
-	Remove(item key) bool
-	Has(item key) bool
+	Add(item node) bool
+	Remove(item node) bool
+	Has(item node) bool
 	Size() int
 	Clear()
 	IsEmpty() bool
-	List() []key
+	List() []node
 }
 
 // 非线程安全的set
-func NewSet(items ...key) Set {
+func NewSet(items ...node) Set {
 	return commConstructor(false, items...)
 }
 
 // 线程安全的set
-func NewCSet(items ...key) Set {
+func NewCSet(items ...node) Set {
 	return commConstructor(true, items...)
 }
 
 // 通用初始化
-func commConstructor(sync bool, items ...key) *set {
-	cache := map[key]bool{}
+func commConstructor(sync bool, items ...node) *set {
+	cache := map[node]bool{}
 	for _, item := range items {
 		cache[item] = true
 	}
@@ -42,7 +42,7 @@ func commConstructor(sync bool, items ...key) *set {
 }
 
 // 返回是否 add 成功, 如果原本这个值已经存在返回false
-func (s *set) Add(item key) bool {
+func (s *set) Add(item node) bool {
 	if s.sync {
 		s.Lock()
 		defer s.Unlock()
@@ -54,7 +54,7 @@ func (s *set) Add(item key) bool {
 	return true
 }
 
-func (s *set) Remove(item key) bool {
+func (s *set) Remove(item node) bool {
 	if s.sync {
 		s.Lock()
 		defer s.Unlock()
@@ -64,7 +64,7 @@ func (s *set) Remove(item key) bool {
 	return has
 }
 
-func (s *set) Has(item key) bool {
+func (s *set) Has(item node) bool {
 	if s.sync {
 		s.RLock()
 		defer s.RUnlock()
@@ -80,7 +80,7 @@ func (s *set) Size() int {
 func (s *set) Clear() {
 	s.RLock()
 	defer s.RUnlock()
-	s.m = map[key]bool{}
+	s.m = map[node]bool{}
 }
 
 func (s *set) IsEmpty() bool {
@@ -90,12 +90,12 @@ func (s *set) IsEmpty() bool {
 	return false
 }
 
-func (s *set) List() []key {
+func (s *set) List() []node {
 	if s.sync {
 		s.RLock()
 		defer s.RUnlock()
 	}
-	var list []key
+	var list []node
 	for item := range s.m {
 		list = append(list, item)
 	}
