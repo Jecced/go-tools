@@ -14,7 +14,7 @@ type set struct {
 
 type Set interface {
 	Add(item key) bool
-	Remove(item key)
+	Remove(item key) bool
 	Has(item key) bool
 	Size() int
 	Clear()
@@ -54,12 +54,14 @@ func (s *set) Add(item key) bool {
 	return true
 }
 
-func (s *set) Remove(item key) {
+func (s *set) Remove(item key) bool {
 	if s.sync {
 		s.Lock()
 		defer s.Unlock()
 	}
+	has := s.Has(item)
 	delete(s.m, item)
+	return has
 }
 
 func (s *set) Has(item key) bool {
