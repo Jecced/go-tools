@@ -2,6 +2,7 @@ package strutil
 
 import (
 	"regexp"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -134,4 +135,10 @@ func InsertString(text *string, insert, template string) {
 		return
 	}
 	*text = (*text)[:st] + insert + (*text)[st:]
+}
+
+// 转义\u00e9文字
+// 转义\xE9\x80文字
+func Decode(text string) (string, error) {
+	return strconv.Unquote("\"" + text + "\"")
 }
