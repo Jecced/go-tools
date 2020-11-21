@@ -1,11 +1,9 @@
-   * [go-tools](#go-tools)
-      * [通用系](#\xE9\x80\x9A\xE7\x94\xA8\xE7\xB3\xBB)
-         * [ak.PS 文件系统路径分隔符](#akps-\xE6\x96\x87\xE4\xBB\xB6\xE7\xB3\xBB\xE7\xBB\x9F\xE8\xB7\xAF\xE5\xBE\x84\xE5\x88\x86\xE9\x9A\x94\xE7\xAC\xA6)
-      * [组件类](#\xE7\xBB\x84\xE4\xBB\xB6\xE7\xB1\xBB)
-         * [set](#set)
-      * [谷歌翻译(英文转中文)](#\xE8\xB0\xB7\xE6\xAD\x8C\xE7\xBF\xBB\xE8\xAF\x91\xE8\x8B\xB1\xE6\x96\x87\xE8\xBD\xAC\xE4\xB8\xAD\xE6\x96\x87)
-
-
+- [go-tools](#go-tools)
+  - [通用系](#%E9%80%9A%E7%94%A8%E7%B3%BB)
+    - [`ak.PS` 文件系统路径分隔符](#akps-%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%B7%AF%E5%BE%84%E5%88%86%E9%9A%94%E7%AC%A6)
+  - [组件类](#%E7%BB%84%E4%BB%B6%E7%B1%BB)
+    - [set](#set)
+  - [谷歌翻译(英文转中文)](#%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E8%8B%B1%E6%96%87%E8%BD%AC%E4%B8%AD%E6%96%87)
 
 # go-tools
 个人go语言开发工具集
