@@ -1,12 +1,13 @@
-package snowflake
+package test
 
 import (
 	"fmt"
+	"github.com/Jecced/go-tools/src/snowflake"
 	"testing"
 )
 
 func Test01(t *testing.T) {
-	worker, err := createWorker(0, 0)
+	worker, err := snowflake.CreateWorker(0, 0)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -16,7 +17,7 @@ func Test01(t *testing.T) {
 	// 并发 goroutine ID生成
 	for i := 0; i < count; i++ {
 		go func() {
-			id := worker.nextId()
+			id := worker.NextId()
 			ch <- id
 		}()
 	}
@@ -32,6 +33,6 @@ func Test01(t *testing.T) {
 		// id作为key存入map
 		m[id] = i
 		fmt.Println(id)
-		fmt.Println(convertToBin(id))
+		fmt.Println(snowflake.ConvertToBin(id))
 	}
 }

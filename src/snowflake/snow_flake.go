@@ -60,7 +60,7 @@ type IdWorker struct {
  * workerId 工作ID (0~31)
  * datacenterId 数据中心ID (0~31)
  */
-func createWorker(workerId int64, datacenterId int64) (*IdWorker, error) {
+func CreateWorker(workerId int64, datacenterId int64) (*IdWorker, error) {
 	if workerId < 0 || workerId > maxWorkerId {
 		return nil, errors.New("worker id excess of quantity")
 	}
@@ -79,7 +79,7 @@ func createWorker(workerId int64, datacenterId int64) (*IdWorker, error) {
 /*
  * 获取ID
  */
-func (w *IdWorker) nextId() int64 {
+func (w *IdWorker) NextId() int64 {
 	// 保障线程安全 加锁
 	w.mutex.Lock()
 	// 生成完成后 解锁
@@ -113,7 +113,7 @@ func (w *IdWorker) nextId() int64 {
 /*
  * 将十进制数字转化为二进制字符串
  */
-func convertToBin(num int64) string {
+func ConvertToBin(num int64) string {
 	s := ""
 	if num == 0 {
 		return "0"

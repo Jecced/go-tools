@@ -47,8 +47,10 @@ set.List() []node
 ```go
 // workerId 工作ID (0~31)
 // datacenterId 数据中心ID (0~31)
-worker, err := snowflake.createWorker(0, 0)
-worker.nextId()
+worker, err := snowflake.CreateWorker(0, 0)
+var id int64 = worker.NextId()
+// 将十进制数字转化为二进制字符串
+var sid string = snowflake.ConvertToBin(id)
 ```
 
 # 伪随机数
