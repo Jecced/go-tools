@@ -18,7 +18,7 @@
 
 # 通用系 
 ## 文件系统路径分隔符 
-```
+```go
 ak.PS
 # 用来快速替代
 string(os.PathSeparator)
@@ -26,7 +26,7 @@ string(os.PathSeparator)
 
 # 组件类
 ## set
-```
+```go
 // 获取一个非线程安全的set
 var set Set = comp.Set(...items)
 
@@ -44,7 +44,7 @@ set.List() []node
 ```
 
 # 雪花算法
-```
+```go
 // workerId 工作ID (0~31)
 // datacenterId 数据中心ID (0~31)
 worker, err := snowflake.createWorker(0, 0)
@@ -52,7 +52,7 @@ worker.nextId()
 ```
 
 # 伪随机数
-```
+```go
 rand := randutil.Random(1000)
 
 rand.GetSeed() //1000
@@ -68,7 +68,7 @@ rand.NextBool()
 
 
 # 谷歌翻译(英文转中文)
-```
+```go
 got := gts.TranslateEn2Cn("今天天气还不错")
 fmt.Println(got)
 // console
