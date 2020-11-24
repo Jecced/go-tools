@@ -20,7 +20,7 @@
 ## 文件系统路径分隔符 
 ```go
 ak.PS
-# 用来快速替代
+// 用来快速替代
 string(os.PathSeparator)
 ```
 
@@ -28,10 +28,10 @@ string(os.PathSeparator)
 ## set
 ```go
 // 获取一个非线程安全的set
-var set Set = comp.Set(...items)
+var set Set = comp.NewSet(...items)
 
 // 获取一个线程安全的set
-var set Set = comp.CSet(...items)
+var set Set = comp.NewCSet(...items)
 
 set.Add(item node) bool
 set.Remove(item node) bool
