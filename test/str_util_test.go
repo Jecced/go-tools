@@ -1,7 +1,8 @@
-package strutil
+package test
 
 import (
 	"fmt"
+	"github.com/Jecced/go-tools/src/strutil"
 	"os"
 	"strings"
 	"testing"
@@ -9,9 +10,9 @@ import (
 )
 
 func TestUnderscoreToUpperCamelCase(t *testing.T) {
-	o := UnderscoreToUpperCamelCase("user_name")
+	o := strutil.UnderscoreToUpperCamelCase("user_name")
 	fmt.Println(o)
-	o = CamelCaseToUnderscore(o)
+	o = strutil.CamelCaseToUnderscore(o)
 	fmt.Println(o)
 }
 
@@ -21,7 +22,7 @@ Output 1: {{title .Name2}}
 Output 2: {{.Name3 | title}}
 `
 
-func Test01(t *testing.T) {
+func TestStr(t *testing.T) {
 	funcMap := template.FuncMap{"title": strings.Title}
 	tpl := template.New("mysql_test")
 	tpl, _ = tpl.Funcs(funcMap).Parse(templateText)
