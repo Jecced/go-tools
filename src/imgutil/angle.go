@@ -38,7 +38,7 @@ func Rotation180(m image.Image) *image.RGBA {
 	return rotate180
 }
 
-// 左右镜像翻转
+// img 图像, 左右镜像翻转
 func FlipMirror(m image.Image) *image.RGBA {
 	bounds := m.Bounds()
 	out := image.NewRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
@@ -50,7 +50,7 @@ func FlipMirror(m image.Image) *image.RGBA {
 	return out
 }
 
-// 上下垂直翻转
+// img 图像, 上下垂直翻转
 func FlipVertical(m image.Image) *image.RGBA {
 	bounds := m.Bounds()
 	out := image.NewRGBA(image.Rect(0, 0, bounds.Dx(), bounds.Dy()))
@@ -82,6 +82,7 @@ func FlipImgMirror(in, out string) error {
 	return rotation(in, out, FlipMirror)
 }
 
+// img 文件 上下垂直翻转
 func FlipImgVertical(in, out string) error {
 	return rotation(in, out, FlipVertical)
 }
