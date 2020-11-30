@@ -19,9 +19,5 @@ func EncodeBase64(data *[]byte) string {
 
 // 解析base64
 func DecodeBase64(text string) ([]byte, error) {
-	decodeBytes, err := base64.StdEncoding.DecodeString(text)
-	if err != nil {
-		return nil, nil
-	}
-	return decodeBytes, nil
+	return base64.StdEncoding.DecodeString(text)
 }
