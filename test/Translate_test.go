@@ -2,7 +2,7 @@ package test
 
 import (
 	"fmt"
-	"github.com/Jecced/go-tools/src/gts"
+	"github.com/Jecced/go-tools/src/translate"
 	"testing"
 )
 
@@ -13,6 +13,6 @@ func TestTranslate(t *testing.T) {
 	select {}
 }
 func test(text string) {
-	cn, err := gts.TranslateEn2Cn(text)
+	cn, err := translate.GoogleTranslate(text)
 	fmt.Println(cn, err)
 }

@@ -131,7 +131,7 @@ imgutil.MixImg(src *image.RGBA, dist image.Image, x, y int)
 
 # 谷歌翻译(英文转中文)
 ```go
-got := gts.TranslateEn2Cn("今天天气还不错")
+got := translate.GoogleTranslate("今天天气还不错")
 fmt.Println(got)
 // console
 // The weather is pretty good today
