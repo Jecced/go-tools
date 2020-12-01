@@ -208,6 +208,20 @@ session.Get(url2).Send().ReadText()
 
 add session method new func to use header
 
+### Https Verification | HTTPS 校验
+
+有些https网站没有可信任的http证书，当请求时将抛出异常。您可以禁用https证书验证:
+
+Some https sites do not have trusted http certificate, Exception will be thrown when request. You can disable https certificate verify by:
+
+```go
+session := https.Session().SkipSSLVerify(true)
+session.Get(url1).Send().ReadText()
+session.Get(url2).Send().ReadText()
+
+https.Get("https://www.google.com").SkipSSLVerify(true).Send().ReadText()
+```
+
 ```go
 session := https.Session().
     AddHeader("header1", "value1").

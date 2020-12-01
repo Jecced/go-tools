@@ -18,6 +18,9 @@ type base struct {
 	// 相应Resp的超时时间
 	respTimeout int
 
+	// 是否跳过https校验
+	skipSSLVerify bool
+
 	// 重试次数
 	retry uint
 }

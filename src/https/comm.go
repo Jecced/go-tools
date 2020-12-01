@@ -59,6 +59,11 @@ func (p *p1) Retry(count uint) *p1 {
 	return p
 }
 
+func (p *p1) SkipSSLVerify(verify bool) *p1{
+	p.comm.skipSSLVerify = verify
+	return p
+}
+
 // 维护 request 私有区
 func (p *p2) AddHeader(key, value string) *p2 {
 	p.req.header.Add(key, value)
@@ -115,5 +120,9 @@ func (p *p2) BasicAuth(user, password string) *p2 {
 }
 func (p *p2) Retry(count uint) *p2 {
 	p.req.retry = count
+	return p
+}
+func (p *p2) SkipSSLVerify(verify bool) *p2{
+	p.req.skipSSLVerify = verify
 	return p
 }

@@ -1,6 +1,7 @@
 package https
 
 import (
+	"crypto/tls"
 	"net"
 	"net/http"
 	"time"
@@ -20,6 +21,7 @@ func (p *p2) buildTransport() *http.Transport {
 
 	t := &http.Transport{
 		Dial: p.dial,
+		TLSClientConfig: &tls.Config{InsecureSkipVerify: p.comm.skipSSLVerify || p.req.skipSSLVerify},
 	}
 	if s.HasRespTimeout() {
 		t.ResponseHeaderTimeout = time.Millisecond * time.Duration(s.GetRespTimeout())
