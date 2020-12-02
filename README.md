@@ -19,8 +19,10 @@
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
-# go-tools
-个人go语言开发工具集
+# go-tools | 使用方式
+```shell
+go get github.com/Jecced/rs
+```
 
 # 通用系 
 ## 文件系统路径分隔符 
