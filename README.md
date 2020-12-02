@@ -30,6 +30,13 @@ go get github.com/Jecced/rs
 ak.PS
 // 用来快速替代
 string(os.PathSeparator)
+
+// 获取md5
+GetMd5(data *[]byte) string 
+// 生成base64
+EncodeBase64(data *[]byte) string 
+// 解析base64
+DecodeBase64(text string) ([]byte, error) 
 ```
 
 # 组件类
@@ -129,6 +136,12 @@ imgutil.Trimming(in, out string, x, y, w, h int) error
 imgutil.CreatPng(width, height int) *image.RGBA
 // 混合两个图片
 imgutil.MixImg(src *image.RGBA, dist image.Image, x, y int)
+```
+
+## gzip
+```go
+gziputil.ZIP([]byte, io.Writer) (int, error)
+gziputil.UNZIP(io.Reader) ([]byte, error)
 ```
 
 # 谷歌翻译(英文转中文)
