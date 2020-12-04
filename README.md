@@ -2,7 +2,7 @@
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
 
 
-- [go-tools](#go-tools)
+- [go-tools | 使用方式](#go-tools--%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F)
 - [通用系](#%E9%80%9A%E7%94%A8%E7%B3%BB)
   - [文件系统路径分隔符](#%E6%96%87%E4%BB%B6%E7%B3%BB%E7%BB%9F%E8%B7%AF%E5%BE%84%E5%88%86%E9%9A%94%E7%AC%A6)
 - [组件类](#%E7%BB%84%E4%BB%B6%E7%B1%BB)
@@ -15,7 +15,11 @@
   - [去除图片四周空白透明](#%E5%8E%BB%E9%99%A4%E5%9B%BE%E7%89%87%E5%9B%9B%E5%91%A8%E7%A9%BA%E7%99%BD%E9%80%8F%E6%98%8E)
   - [图片缩放](#%E5%9B%BE%E7%89%87%E7%BC%A9%E6%94%BE)
   - [图片工具](#%E5%9B%BE%E7%89%87%E5%B7%A5%E5%85%B7)
+  - [gzip](#gzip)
 - [谷歌翻译(英文转中文)](#%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E8%8B%B1%E6%96%87%E8%BD%AC%E4%B8%AD%E6%96%87)
+- [网络请求工具](#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%B7%A5%E5%85%B7)
+- [file 操作](#file-%E6%93%8D%E4%BD%9C)
+  - [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -155,6 +159,41 @@ fmt.Println(got)
 # 网络请求工具
 **接口过多, 请访问独立文档**  *[请求工具文档](https://github.com/Jecced/go-tools/blob/master/README_HTTPS.md)*
 
+# file 操作
+```go
+// 根据路径创建文件夹
+fileutil.MkdirAll(path string) error
+// 创建一个文件的父目录
+fileutil.MkdirParent(path string) error
+// 获取某个文件夹下所有指定后缀的文件
+fileutil.GetFilesBySuffix(dirPath string, suffix string) (files []string, err error)
+// 文件拷贝
+fileutil.FileCopy(src, dist string) (err error)
+// 目录拷贝
+fileutil.DirCopy(src, dist string) error
+// 判断一个路径是否存在
+fileutil.PathExists(path string) bool
+// 获取一个路径的父目录地址
+fileutil.GetParentDir(path string) string
+// 路径格式化, 标准化一个路径到当前系统规范
+fileutil.PathFormat(path string) string
+// 获取目录下所有文件类型
+fileutil.FindAllFileTypes(dir string) (types []string)
+// 写入文本到指定文件
+fileutil.WriteText(text, dist string) error
+// 写入数据到指定文件
+fileutil.WriteData(data []byte, dist string) error
+// 将一个文件读取成字符串返回
+fileutil.ReadText(file string) (string, error)
+// 读取一个文件的 byte 二进制
+fileutil.ReadBytes(file string) ([]byte, error)
+// 清空一个目录的所有内容
+fileutil.ClearDir(dir string)
+// 可以删除一个文件, 空文件夹
+fileutil.RemoveFile(file string) error
+// 自内向外删除所有空文件夹, 如果文件是.DS_Store的话, 也会一起删除
+fileutil.DelEmptyDir(dir string) (bool, error)
+```
 
 ## LICENSE
 
