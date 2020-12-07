@@ -7,6 +7,7 @@ import (
 	"unicode"
 )
 
+// 判断字符串是否包含中文
 func IsChineseChar(str string) bool {
 	for _, r := range str {
 		if unicode.Is(unicode.Scripts["Han"], r) ||

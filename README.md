@@ -19,7 +19,8 @@
 - [谷歌翻译(英文转中文)](#%E8%B0%B7%E6%AD%8C%E7%BF%BB%E8%AF%91%E8%8B%B1%E6%96%87%E8%BD%AC%E4%B8%AD%E6%96%87)
 - [网络请求工具](#%E7%BD%91%E7%BB%9C%E8%AF%B7%E6%B1%82%E5%B7%A5%E5%85%B7)
 - [file 操作](#file-%E6%93%8D%E4%BD%9C)
-  - [LICENSE](#license)
+- [string 操作](#string-%E6%93%8D%E4%BD%9C)
+- [LICENSE](#license)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
 
@@ -195,7 +196,50 @@ fileutil.RemoveFile(file string) error
 fileutil.DelEmptyDir(dir string) (bool, error)
 ```
 
-## LICENSE
+
+# string 操作
+```go
+// 判断字符串是否包含中文
+strutil.IsChineseChar(str string) bool
+
+// 下划线转驼峰
+strutil.UnderscoreToUpperCamelCase(s string) string
+
+// 下划线转小写驼峰
+strutil.UnderscoreToLowerCamelCase(s string) string
+
+// 驼峰转下划线
+strutil.CamelCaseToUnderscore(s string) string
+
+// 前后缀匹配出第一个[正则方式]
+strutil.FindMatchFirst(str, s, e string, fix bool) string
+
+// 前后缀匹配[正则方式]
+strutil.FindMatch(str, s, e string, fix bool) []string
+
+// 基于 strings.Index 实现的前后缀匹配查找第一个
+strutil.MatchStringFirst(text, prefix, suffix string, fix bool) string
+
+// 基于 strings.Index 实现的前后缀匹配查找
+strutil.MatchString(text, prefix, suffix string, fix bool) []string
+
+// 完善 strings.Index, 多加入索引位置参数
+strutil.IndexOf(text, substr string, index int) int
+
+// 插入文本, 插入的内容 @insert 会放在原始文本 @text 中 @template 的前面
+// 在 @insert 中搜索 @template 的位置 @st
+// 在 @st 位置 前 插入 @insert 的字符串文本内容
+// @param text 		原始文本
+// @param insert 	插入的内容
+// @param template 	查询字符串
+strutil.InsertString(text *string, insert, template string)
+
+// 转义\u00e9文字
+// 转义\xE9\x80文字
+strutil.Decode(text string) (string, error)
+```
+
+# LICENSE
 
     MIT License
     
