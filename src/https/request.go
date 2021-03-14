@@ -45,6 +45,12 @@ func (p *p2) ClearParam() *p2 {
 	return p
 }
 
+// 使用payload post请求
+func (p *p2) UsePayload() *p2 {
+	p.usePayload = true
+	return p
+}
+
 func (p *p2) Send() *p3 {
 	s := (*session)(p)
 	retry := s.GetRetry()

@@ -19,6 +19,8 @@ type session struct {
 
 	// 已经重试的次数
 	retry uint
+
+	usePayload bool // 是否使用json payload 格式传输数据
 }
 
 func Session() *p1 {

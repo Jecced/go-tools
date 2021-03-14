@@ -1,6 +1,8 @@
 package https
 
 import (
+	"bytes"
+	"encoding/json"
 	"net/http"
 	"net/url"
 	"strings"
@@ -38,5 +40,19 @@ func (p *p2) getNewRequest() (*http.Request, error) {
 
 // 生成post请求
 func (p *p2) postNewRequest() (*http.Request, error) {
-	return http.NewRequest(p.method, p.uri, strings.NewReader(p.param.Encode()))
+	//return http.NewRequest(p.method, p.uri, strings.NewReader(p.param.Encode()))
+
+	var jsonBytes []byte
+
+	var err error
+	if p.usePayload {
+		jsonBytes, err = json.Marshal(p.param)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		jsonBytes = []byte(p.param.Encode())
+	}
+
+	return http.NewRequest(p.method, p.uri, bytes.NewBuffer(jsonBytes))
 }

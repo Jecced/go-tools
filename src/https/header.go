@@ -12,8 +12,12 @@ func (s *session) SetHeader(request *http.Request) {
 		s.req.header.Add(headerAuthorization, auth)
 	}
 
-	if s.method == post && len(s.param) > 0 {
-		request.Header.Set(headerContentType, "application/x-www-form-urlencoded")
+	if s.method == post {
+		if s.usePayload {
+			request.Header.Set(headerContentType, "application/json")
+		} else if len(s.param) > 0 {
+			request.Header.Set(headerContentType, "application/x-www-form-urlencoded")
+		}
 	}
 
 	// 设置cookie
