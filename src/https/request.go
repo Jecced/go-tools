@@ -46,8 +46,8 @@ func (p *p2) ClearParam() *p2 {
 }
 
 // 使用payload post请求
-func (p *p2) UsePayload() *p2 {
-	p.usePayload = true
+func (p *p2) UsePayload(body interface{}) *p2 {
+	p.usePayload = body
 	return p
 }
 

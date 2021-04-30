@@ -45,8 +45,8 @@ func (p *p2) postNewRequest() (*http.Request, error) {
 	var jsonBytes []byte
 
 	var err error
-	if p.usePayload {
-		jsonBytes, err = json.Marshal(p.param)
+	if p.usePayload != nil {
+		jsonBytes, err = json.Marshal(p.usePayload)
 		if err != nil {
 			return nil, err
 		}

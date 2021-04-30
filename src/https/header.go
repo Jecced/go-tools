@@ -13,7 +13,7 @@ func (s *session) SetHeader(request *http.Request) {
 	}
 
 	if s.method == post {
-		if s.usePayload {
+		if s.usePayload != nil {
 			request.Header.Set(headerContentType, "application/json")
 		} else if len(s.param) > 0 {
 			request.Header.Set(headerContentType, "application/x-www-form-urlencoded")
