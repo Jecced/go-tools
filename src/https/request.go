@@ -86,6 +86,8 @@ func (p *p2) send() error {
 		request, err = p.getNewRequest()
 	case post:
 		request, err = p.postNewRequest()
+	default:
+		request, err = p.postNewRequest()
 	}
 
 	if err != nil {
