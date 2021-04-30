@@ -23,6 +23,11 @@ func (p *p2) AddParam(key, value string) *p2 {
 	return p
 }
 
+func (p *p2) ChangeMethod(method string) *p2 {
+	p.method = method
+	return p
+}
+
 // 增加多个请求参数
 func (p *p2) AddParams(param map[string]string) *p2 {
 	for k, v := range param {
