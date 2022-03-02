@@ -2,6 +2,7 @@ package fileutil
 
 import (
 	"bytes"
+	"fmt"
 	"io"
 	"io/ioutil"
 	"os"
@@ -10,16 +11,16 @@ import (
 )
 
 const (
-	// 系统路径分隔符
+	// FileSep 系统路径分隔符
 	FileSep = string(os.PathSeparator)
 )
 
-// 根据路径创建文件夹
+// MkdirAll 根据路径创建文件夹
 func MkdirAll(path string) error {
 	return os.MkdirAll(path, 0777)
 }
 
-// 创建一个文件的父目录
+// MkdirParent 创建一个文件的父目录
 func MkdirParent(path string) error {
 	parent := GetParentDir(path)
 	if !PathExists(parent) {
@@ -28,8 +29,8 @@ func MkdirParent(path string) error {
 	return nil
 }
 
-// 获取某个文件夹下所有指定后缀的文件
-func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error) {
+// FindBySuffix 获取某个文件夹下所有指定后缀的文件
+func FindBySuffix(dirPath string, suffix string) (files []string, err error) {
 	// 后缀转大写
 	suffix = strings.ToUpper(suffix)
 	for strings.HasSuffix(dirPath, FileSep) {
@@ -41,7 +42,7 @@ func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error)
 	}
 	for _, fi := range dir {
 		if fi.IsDir() {
-			newFiles, _ := GetFilesBySuffix(dirPath+FileSep+fi.Name(), suffix)
+			newFiles, _ := FindBySuffix(dirPath+FileSep+fi.Name(), suffix)
 			files = append(files, newFiles...)
 		} else if strings.HasSuffix(strings.ToUpper(fi.Name()), suffix) {
 			files = append(files, dirPath+FileSep+fi.Name())
@@ -50,7 +51,12 @@ func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error)
 	return files, nil
 }
 
-// 文件拷贝
+// Deprecated: use FindBySuffix(from, to) replace this method
+func GetFilesBySuffix(dirPath string, suffix string) (files []string, err error) {
+	return FindBySuffix(dirPath, suffix)
+}
+
+// FileCopy 文件拷贝
 func FileCopy(src, dist string) (err error) {
 	_ = os.Remove(dist)
 
@@ -59,7 +65,9 @@ func FileCopy(src, dist string) (err error) {
 	if err != nil {
 		return err
 	}
-	defer srcFile.Close()
+	defer func() {
+		_ = srcFile.Close()
+	}()
 
 	// 创建输出文件的父目录
 	err = MkdirParent(dist)
@@ -72,7 +80,9 @@ func FileCopy(src, dist string) (err error) {
 	if err != nil {
 		return err
 	}
-	defer distFile.Close()
+	defer func() {
+		_ = distFile.Close()
+	}()
 
 	// 创建缓冲区
 	bs := make([]byte, 1024*10, 1024*10)
@@ -89,7 +99,7 @@ func FileCopy(src, dist string) (err error) {
 	return nil
 }
 
-// 目录拷贝
+// DirCopy 目录拷贝
 func DirCopy(src, dist string) error {
 	err := MkdirAll(dist)
 	if err != nil {
@@ -113,13 +123,13 @@ func DirCopy(src, dist string) error {
 	return nil
 }
 
-// 判断一个路径是否存在
+// PathExists 判断一个路径是否存在
 func PathExists(path string) bool {
 	stat, _ := os.Stat(path)
 	return stat != nil
 }
 
-// 获取一个路径的父目录地址
+// GetParentDir 获取一个路径的父目录地址
 func GetParentDir(path string) string {
 	//path = strings.Trim(path, " ")
 	//if strings.HasSuffix(path, "/") || strings.HasSuffix(path, FileSep) {
@@ -134,7 +144,23 @@ func GetParentDir(path string) string {
 	return dir
 }
 
-// 路径格式化, 标准化一个路径到当前系统规范
+// GetFileName 根据路径, 获取文件名
+func GetFileName(path string) string {
+	_, name := filepath.Split(path)
+	return name
+}
+
+// GetSuffix 根据路径, 获取文件后缀
+func GetSuffix(path string) string {
+	name := GetFileName(path)
+	lastIndex := strings.LastIndex(name, ".")
+	if -1 == lastIndex {
+		return "unknown"
+	}
+	return name[lastIndex:]
+}
+
+// PathFormat 路径格式化, 标准化一个路径到当前系统规范
 func PathFormat(path string) string {
 	list := []rune(path)
 	ps := os.PathSeparator
@@ -157,7 +183,7 @@ func PathFormat(path string) string {
 	return string(list)
 }
 
-// 获取目录下所有文件类型
+// FindAllFileTypes 获取目录下所有文件类型
 func FindAllFileTypes(dir string) (types []string) {
 
 	cache := make(map[string]bool)
@@ -194,7 +220,7 @@ func FindAllFileTypes(dir string) (types []string) {
 	return
 }
 
-// 写入文本到指定文件
+// WriteText 写入文本到指定文件
 func WriteText(text, dist string) error {
 	// 创建输出文件的父目录
 	//MkdirParent(dist)
@@ -208,7 +234,7 @@ func WriteText(text, dist string) error {
 	return WriteData([]byte(text), dist)
 }
 
-// 写入数据到指定文件
+// WriteData 写入数据到指定文件
 func WriteData(data []byte, dist string) error {
 	// 创建输出文件的父目录
 	MkdirParent(dist)
@@ -224,7 +250,7 @@ func WriteData(data []byte, dist string) error {
 	return nil
 }
 
-// 将一个文件读取成字符串返回
+// ReadText 将一个文件读取成字符串返回
 func ReadText(file string) (string, error) {
 	bytes, err := ReadBytes(file)
 	if err != nil {
@@ -233,7 +259,7 @@ func ReadText(file string) (string, error) {
 	return string(bytes), nil
 }
 
-// 读取一个文件的 byte 二进制
+// ReadBytes 读取一个文件的 byte 二进制
 func ReadBytes(file string) ([]byte, error) {
 	fileBytes, err := ioutil.ReadFile(file)
 	if err != nil {
@@ -242,22 +268,21 @@ func ReadBytes(file string) ([]byte, error) {
 	return fileBytes, nil
 }
 
-// 清空一个目录的所有内容
+// ClearDir 清空一个目录的所有内容
 func ClearDir(dir string) {
 	_ = os.RemoveAll(dir)
 }
 
-// 可以删除一个文件, 空文件夹
+// RemoveFile 可以删除一个文件, 空文件夹
 func RemoveFile(file string) error {
 	return os.Remove(file)
 }
 
-// 从 from 到 to 的相对路径
+// GetRelativePath 从 from 到 to 的相对路径
 //
-// outJsPath := "/Users/ankang/git/saisheng/slgrpg/temp/quick-scripts/assets/script/feature/battleoverride"
-// filePath := "/Users/ankang/git/saisheng/slgrpg/assets/script/feature/battleoverride"
-// fmt.Println(outJsPath, filePath)
-// path := fileutil.GetRelativePath(outJsPath, filePath)
+// old := "/Users/xxx/yyy/zzz/www/temp/quick-scripts/assets/script/feature/battle"
+// now := "/Users/xxx/yyy/zzz/www/assets/script/feature/battle"
+// path := GetRelativePath(old, now)
 // fmt.Println(path)
 //
 // Deprecated: use filepath.Rel(from, to) replace this method
@@ -290,7 +315,7 @@ func GetRelativePath(from, to string) string {
 	return path[:len(path)-1]
 }
 
-// 自内向外删除所有空文件夹, 如果文件是.DS_Store的话, 也会一起删除
+// DelEmptyDir 自内向外删除所有空文件夹, 如果文件是.DS_Store的话, 也会一起删除
 func DelEmptyDir(dir string) (bool, error) {
 	list, err := ioutil.ReadDir(dir)
 	if err != nil {
@@ -327,4 +352,27 @@ func DelEmptyDir(dir string) (bool, error) {
 		}
 	}
 	return l == 0, nil
+}
+
+// FileSize 格式化文件的大小
+func FileSize(path string) (size string) {
+	info, err := os.Stat(path)
+	if err != nil {
+		return err.Error()
+	}
+	fileSize := info.Size()
+	if fileSize < 1024 {
+		//return strconv.FormatInt(fileSize, 10) + "B"
+		return fmt.Sprintf("%.2fB", float64(fileSize)/float64(1))
+	} else if fileSize < (1024 * 1024) {
+		return fmt.Sprintf("%.2fKB", float64(fileSize)/float64(1024))
+	} else if fileSize < (1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2fMB", float64(fileSize)/float64(1024*1024))
+	} else if fileSize < (1024 * 1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2fGB", float64(fileSize)/float64(1024*1024*1024))
+	} else if fileSize < (1024 * 1024 * 1024 * 1024 * 1024) {
+		return fmt.Sprintf("%.2fTB", float64(fileSize)/float64(1024*1024*1024*1024))
+	} else { //if fileSize < (1024 * 1024 * 1024 * 1024 * 1024 * 1024)
+		return fmt.Sprintf("%.2fEB", float64(fileSize)/float64(1024*1024*1024*1024*1024))
+	}
 }
