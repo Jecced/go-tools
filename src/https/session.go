@@ -80,3 +80,11 @@ func (s *session) GetAuth() string {
 	}
 	return auth
 }
+
+func (p *p1) GetCookies() param {
+	return p.comm.cookie
+}
+
+func (p *p1) GetCookie(key string) string {
+	return p.comm.cookie[key]
+}
