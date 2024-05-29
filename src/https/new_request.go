@@ -46,7 +46,11 @@ func (p *p2) postNewRequest() (*http.Request, error) {
 
 	var err error
 	if p.usePayload != nil {
-		jsonBytes, err = json.Marshal(p.usePayload)
+		if s, ok := p.usePayload.(string); ok {
+			jsonBytes = []byte(s)
+		} else {
+			jsonBytes, err = json.Marshal(p.usePayload)
+		}
 		if err != nil {
 			return nil, err
 		}
