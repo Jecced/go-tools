@@ -56,6 +56,11 @@ func (p *p2) UsePayload(body interface{}) *p2 {
 	return p
 }
 
+func (p *p2) Payload(body interface{}) *p2 {
+	p.usePayload = body
+	return p
+}
+
 func (p *p2) Send() *p3 {
 	s := (*session)(p)
 	retry := s.GetRetry()
