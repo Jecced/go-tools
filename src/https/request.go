@@ -1,7 +1,9 @@
 package https
 
 import (
+	"encoding/json"
 	"fmt"
+	"github.com/Jecced/go-tools/src/fileutil"
 	"log"
 	"net/http"
 )
@@ -117,5 +119,17 @@ func (p *p2) send() error {
 	}
 
 	p.response = response
+
+	if p.comm.cookieSerializationPath != "" {
+		bytes, err := json.Marshal(p.comm.cookie)
+		if err != nil {
+			return err
+		}
+		err = fileutil.WriteData(bytes, p.comm.cookieSerializationPath)
+		if err != nil {
+			return err
+		}
+	}
+
 	return nil
 }

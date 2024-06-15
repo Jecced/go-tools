@@ -1,6 +1,11 @@
 package https
 
-import "net/url"
+import (
+	"encoding/json"
+	"fmt"
+	"github.com/Jecced/go-tools/src/fileutil"
+	"net/url"
+)
 
 // 阶段一
 // 维护session共享区
@@ -87,4 +92,23 @@ func (p *p1) GetCookies() param {
 
 func (p *p1) GetCookie(key string) string {
 	return p.comm.cookie[key]
+}
+
+func (p *p1) SetCookieSerializationPath(path string) *p1 {
+	p.comm.cookieSerializationPath = path
+	bytes, err := fileutil.ReadBytes(path)
+	if err != nil {
+		fmt.Println("没有读取到文件", err.Error())
+		return p
+	}
+	var loadCookies map[string]string
+	err = json.Unmarshal(bytes, &loadCookies)
+	if err != nil {
+		fmt.Println("json unmarshal 失败", err.Error())
+		return p
+	}
+	for k, v := range loadCookies {
+		p.comm.cookie.Add(k, v)
+	}
+	return p
 }
