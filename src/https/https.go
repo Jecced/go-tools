@@ -32,6 +32,10 @@ func Session() *p1 {
 	return p
 }
 
+func SerializationSession(path string) *p1 {
+	return Session().SetCookieSerializationPath(path)
+}
+
 func Get(url string) *p2 {
 	return Session().Get(url)
 }

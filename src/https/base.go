@@ -5,6 +5,9 @@ type base struct {
 	// 请求结束后服务器返回的 cookie 会合并到 session 部分的 cookie
 	cookie param
 
+	// cookie 序列化 反序列化地址 序列化到一个本地文件
+	cookieSerializationPath string
+
 	// header 请求的时候回合并 session 的 header
 	header param
 
