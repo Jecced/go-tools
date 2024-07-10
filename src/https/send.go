@@ -5,6 +5,7 @@ import (
 	"github.com/Jecced/go-tools/src/fileutil"
 	"io"
 	"io/ioutil"
+	"net/http"
 	"os"
 )
 
@@ -102,4 +103,26 @@ func (p *p3) GetBytes() ([]byte, error) {
 		return nil, err
 	}
 	return all, nil
+}
+
+func (p *p3) GetReaderAndHeader() (io.Reader, http.Header, error) {
+	header := p.response.Header
+	reader, err := p.GetReader()
+	return reader, header, err
+}
+
+func (p *p3) GetBytesAndHeader() ([]byte, http.Header, error) {
+	header := p.response.Header
+	bytes, err := p.GetBytes()
+	return bytes, header, err
+}
+
+func (p *p3) ReadTextAndHeader() (string, http.Header, error) {
+	header := p.response.Header
+	text, err := p.ReadText()
+	return text, header, err
+}
+
+func (p *p3) GetHeader() http.Header {
+	return p.response.Header
 }
