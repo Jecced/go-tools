@@ -7,6 +7,7 @@ type ISession interface {
 	ClearHeader() *p1
 	AddCookie(key string, value string) *p1
 	AddCookies(entries map[string]string) *p1
+	AddCookieString(cookie string) *p1
 	RemoveCookie(key string) *p1
 	ClearCookie() *p1
 	SetTimeOut(time int) *p1
