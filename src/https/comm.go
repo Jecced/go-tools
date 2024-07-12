@@ -1,5 +1,7 @@
 package https
 
+import "strings"
+
 // 维护session共享区
 func (p *p1) AddHeader(key, value string) *p1 {
 	p.comm.header.Add(key, value)
@@ -25,6 +27,20 @@ func (p *p1) AddCookies(entries map[string]string) *p1 {
 	p.comm.cookie.Adds(entries)
 	return p
 }
+
+// AddCookieString
+// key1=a; key2=b
+func (p *p1) AddCookieString(cookie string) *p1 {
+	cookies := strings.Split(cookie, ";")
+	for _, c := range cookies {
+		o := strings.Split(c, "=")
+		key := strings.Trim(o[0], " ")
+		value := strings.Trim(o[1], " ")
+		p.AddCookie(key, value)
+	}
+	return p
+}
+
 func (p *p1) RemoveCookie(key string) *p1 {
 	p.comm.cookie.Remove(key)
 	return p
@@ -59,7 +75,7 @@ func (p *p1) Retry(count uint) *p1 {
 	return p
 }
 
-func (p *p1) SkipSSLVerify(verify bool) *p1{
+func (p *p1) SkipSSLVerify(verify bool) *p1 {
 	p.comm.skipSSLVerify = verify
 	return p
 }
@@ -122,7 +138,7 @@ func (p *p2) Retry(count uint) *p2 {
 	p.req.retry = count
 	return p
 }
-func (p *p2) SkipSSLVerify(verify bool) *p2{
+func (p *p2) SkipSSLVerify(verify bool) *p2 {
 	p.req.skipSSLVerify = verify
 	return p
 }
