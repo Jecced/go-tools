@@ -1,6 +1,7 @@
 package https
 
 import (
+	"encoding/json"
 	"errors"
 	"github.com/Jecced/go-tools/src/fileutil"
 	"io"
@@ -121,6 +122,20 @@ func (p *p3) ReadTextAndHeader() (string, http.Header, error) {
 	header := p.response.Header
 	text, err := p.ReadText()
 	return text, header, err
+}
+
+func (p *p3) Read(obj interface{}) error {
+	bytes, err := p.GetBytes()
+	if err != nil {
+		return err
+	}
+
+	err = json.Unmarshal(bytes, &obj)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (p *p3) GetHeader() http.Header {
